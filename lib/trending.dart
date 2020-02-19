@@ -15,33 +15,30 @@ class TrendingPage extends StatefulWidget {
   TrendingPageState createState() => TrendingPageState();
 }
 
-List<String> trendingYeets = ["Trending yeet 1", "Trending yeet 2", "Banana",];
+List<String> trendingYeets = ["Trending yeet 1", "Trending yeet 2", "Banana", "Tomato", "Pancake"];
 
 class TrendingPageState extends State<TrendingPage> {
-
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 30, left: 50.0, bottom: 10),
-          child: Text(
-            'Trending',
-            style: TextStyle(
-              fontFamily: 'Montserrat',
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-              fontSize: 30.0
-            )
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: ListView(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 40, top: 20, bottom: 20),
+            child: Text(
+              'Trending',
+              style: TextStyle(
+                fontFamily: 'Montserrat',
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 30.0
+              )
+            ),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 45.0, right: 20.0),
-          height: MediaQuery.of(context).size.height - 155.0,
-          child: Yeet().buildYeets(trendingYeets)
-        ),
-      ],
+          Yeet().buildYeets(trendingYeets)
+        ],
+      ),
     );
   }
 }

@@ -2,28 +2,19 @@ import 'package:first_app/replyPage.dart';
 import 'package:flutter/material.dart';
 import 'custom_icons.dart';
 
-// ToDo: remove unused paddings
-
 class Yeet extends StatelessWidget {
   final String yeetText;
   Yeet([this.yeetText]);
 
   @override
   Widget build(BuildContext context) {
-    return Column( 
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 0.0, right: 5.0, top: 0.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [        
-              createText(yeetText, context),
-              makeUpvotes()
-            ],
-          ),  
-        ),
-      ]
-  );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [        
+        createText(yeetText, context),
+        makeUpvotes()
+      ],
+    );
 }
 
 /*
@@ -34,10 +25,11 @@ Widget buildYeets(List<String> yeets) {
 }
 */
 
-// List view builder for everything except replies
 Widget buildYeets(List<String> yeets) {
   return ListView.separated(
-    padding: EdgeInsets.only(left: 5.0, right: 5.0),
+    physics: ScrollPhysics(),
+    padding: EdgeInsets.only(left: 40, right: 40),
+    shrinkWrap: true,
     itemCount: yeets.length,
     separatorBuilder: (context, index) {
       return Divider();
@@ -50,48 +42,43 @@ Widget buildYeets(List<String> yeets) {
 
 Widget createText(yeetText, context) {
   return Column(
-    children: [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:[
-          SizedBox(height: 30.0, width: 0.0),
-          Container(
-            width: 270,
-            child: Text(
-              yeetText,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 5,
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                height: 1.15,
-                fontSize: 18.0,
-              )
-            ),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children:[
+      SizedBox(height: 30.0),
+      Container(
+        width: 275,
+        child: Text(
+          yeetText,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 5,
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            height: 1.15,
+            fontSize: 18.0,
+          )
+        ),
+      ),
+      SizedBox(height: 30.0,),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.message, size: 30),
+            color: Colors.grey[500],
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => ReplyPage())
+              );
+            }
           ),
-          SizedBox(height: 30.0, width: 0.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.message, size: 30),
-                color: Colors.grey[500],
-                onPressed: () {
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => ReplyPage())
-                  );
-                }
-              ),
-              SizedBox(width: 5.0),
-              Text("5", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
-              SizedBox(width: 90.0),
-              Text("50m", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
-            ],
-          ),
-          Divider(),
-        ]
-      )
-    ] 
+          SizedBox(width: 5.0),
+          Text("5", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
+          SizedBox(width: 90.0),
+          Text("50m", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
+        ],
+      ),
+    ]
   );
 }
 

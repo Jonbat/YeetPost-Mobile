@@ -1,11 +1,25 @@
 import 'location.dart';
 import 'trending.dart';
+import 'profile.dart';
+import 'writeYeet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 void main() => runApp(MaterialApp(
   debugShowCheckedModeBanner: false,
   title: "YeetPost",
+  theme: ThemeData(
+    // update font later
+    // String fontFamily : ,
+    focusColor: Color(0xFF21BFBD),
+    hoverColor: Color(0xFF21BFBD),
+    highlightColor: Color(0xFF21BFBD),
+    buttonColor: Color(0xFF21BFBD),
+    textSelectionColor: Color(0xFF21BFBD),
+    textSelectionHandleColor: Color(0xFF21BFBD),
+    //primaryColor:  Color(0xFF21BFBD),
+    //accentColor: Colors.white,
+  ),
   home: MyApp(),
 ));
 
@@ -20,7 +34,6 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
     tabController = TabController(length: 4, vsync: this);
   }
 
@@ -33,21 +46,20 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          /*
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(30),
-          ),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+      /* 
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(30),
         ),
-        */
-          elevation: 0.0, // no shadow
-          backgroundColor: Color(0xFF21BFBD),
-          flexibleSpace: SafeArea(
-            child: getTabBar(),
-          ),
-        ),
-        body: getTabBarPages());
+      ),
+      */
+      elevation: 0.0, // no shadow
+      backgroundColor: Color(0xFF21BFBD),
+      flexibleSpace: SafeArea(child: getTabBar(), ),
+      ),
+      body: getTabBarPages());
   }
 
   Widget getTabBar() {
@@ -69,8 +81,8 @@ class MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       children: <Widget>[
       LocationPage(),
       TrendingPage(),
-      Text("Profile Tab"),
-      Text("Create Tab"),
+      ProfilePage(),
+      WriteYeetPage(),
     ]);
   }
 }

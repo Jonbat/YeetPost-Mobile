@@ -21,23 +21,19 @@ class LocationPageState extends State<LocationPage> {
       backgroundColor: Color(0xFF21BFBD),
       body: Container(
         alignment: Alignment.topCenter,
-        //height: MediaQuery.of(context).size.height - 80.0,
-
-        
-        // ToDo: put the curve in front of listview?
         //  - Add gradient? linear with appbar
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(75.0)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(60.0)),//75
         ),
         child: ListView(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 40, top: 30),
+              padding: EdgeInsets.only(left: 50, top: 20, bottom: 20),
               child: Text(
                 'Locations',
                 style: TextStyle(
-                  fontFamily: 'Montserrat',
+                  //fontFamily: 'Montserrat',
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 30.0
@@ -57,7 +53,7 @@ List<String> locations = ["SAU", "Duck", "Banana", "ChickenDuck", "Cow", "Frog",
 Widget buildLocations() {
   return ListView.separated(
     physics: ScrollPhysics(),
-    padding: EdgeInsets.only(left: 60, right: 40),
+    padding: EdgeInsets.only(left: 50, right: 50),
     shrinkWrap: true,
     itemCount: locations.length,
     separatorBuilder: (context, index) {
@@ -81,7 +77,7 @@ Widget buildLocation(String locationName) {
             style: TextStyle(
               color: Colors.grey[950],
               fontFamily: 'Montserrat',
-              fontSize: 18.0,
+              fontSize: 20.0,
               fontWeight: FontWeight.bold
             )
           )
@@ -95,21 +91,3 @@ Widget buildLocation(String locationName) {
     ],
   );
 }
-
-// White on green text
-/*
-Padding(
-  padding: EdgeInsets.only(left: 40.0),
-  child: Row(
-    children: <Widget>[
-      Text('Locations',
-        style: TextStyle(
-        //fontFamily: 'Montserrat',
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 25.0)
-      ),
-    ],
-  ),
-),
-*/
