@@ -50,9 +50,11 @@ class YeetState extends State<Yeet> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
-        SizedBox(height: 30.0),
+        SizedBox(height: 20.0),
+        Text("Anonymous", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
+        SizedBox(height: 5.0),
         CustomTextBox(yeetText),
-        SizedBox(height: 30.0,),
+        SizedBox(height: 20.0,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
@@ -68,7 +70,7 @@ class YeetState extends State<Yeet> {
   }
 
   Widget makeReplyIcon(context, disableReplyButton) {
-    if  (disableReplyButton) { 
+    if (disableReplyButton) { 
       return Icon(Icons.message, size: 30, color: Colors.grey[500]);
     } else {
       return IconButton(

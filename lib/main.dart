@@ -15,11 +15,16 @@ void main() => runApp(MaterialApp(
     focusColor: Color(0xFF21BFBD),
     hoverColor: Color(0xFF21BFBD),
     highlightColor: Color(0xFF21BFBD),
-    buttonColor: Color(0xFF21BFBD),
     textSelectionColor: Color(0xFF21BFBD),
     textSelectionHandleColor: Color(0xFF21BFBD),
     //primaryColor:  Color(0xFF21BFBD),
     //accentColor: Colors.white,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Color(0xFF21BFBD),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0)
+      )
+    ),
     inputDecorationTheme: InputDecorationTheme(
       labelStyle: TextStyle(
         color: Colors.grey,

@@ -12,29 +12,63 @@ class ReplyPage extends StatelessWidget {
           backgroundColor: Color(0xFF21BFBD),
       ),
       backgroundColor: Colors.white,
-      body: ListView(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 40, right: 40),
-          child: Column(
-            children: <Widget>[
-              Yeet("Reply Yeet", true),
-              SizedBox(height: 15,)
-            ],
-          ),
-        ),
-        Reply().buildReplies(replyList),
-        replyComposer()
-      ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height - 140.0,
+              child: ListView(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 40, right: 40),
+                    child: Column(
+                      children: <Widget>[
+                        Yeet("Reply Yeet", true),
+                        SizedBox(height: 15,)
+                      ],
+                    ),
+                  ),
+                  Reply().buildReplies(replyList),
+                ],
+              ),
+            ),
+            //Divider(),
+            SizedBox(height : 5,),
+            replyComposer(),
+          ],
+        )
       )
     );
   }
 }
 
-// Reply composer: chat UI video 59:00
-
 Widget replyComposer() {
-  return Text("Reply Composer");
+  return Container(
+    padding: EdgeInsets.only(left: 10, right: 10,),
+    height: 50,
+    child: Row(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            decoration: InputDecoration(
+              labelText: "Reply...",
+            ),
+            keyboardType: TextInputType.text,
+            style: TextStyle(
+              fontFamily: "Poppins",
+            ),
+          ),
+        ),
+        SizedBox(width: 5),
+        IconButton(
+          icon: Icon(Icons.send, size: 28),
+          color: Color(0xFF21BFBD),
+          onPressed: () {
+          }
+        )
+      ],
+    )
+  );
 }
 
 List<String> replyList = ["First reply", "A second reply", "Now this is a third reply", "Fourth", ];
