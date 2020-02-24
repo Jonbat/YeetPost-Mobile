@@ -1,48 +1,41 @@
 import 'package:flutter/material.dart';
-import 'reply.dart';
 import 'yeet.dart';
+import 'reply.dart';
 
-class ReplyView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ReplyPage(),
-    );
-  }
-}
-
-class ReplyPage extends StatefulWidget {
-  @override
-  ReplyPageState createState() => ReplyPageState();
-}
-
-class ReplyPageState extends State<ReplyPage> {
-  @override
+class ReplyPage extends StatelessWidget {
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yeet'),
+        title: Text('Replies'),
           elevation: 0.0, // no shadow
           backgroundColor: Color(0xFF21BFBD),
       ),
       backgroundColor: Colors.white,
       body: ListView(
-        primary: false,
-        padding: EdgeInsets.only(left: 30.0, right: 20.0),
-        children: <Widget>[
-          Yeet("The yeet to reply to"),
-          buildReplies(),
-        ],
-      ),
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 40, right: 40),
+          child: Column(
+            children: <Widget>[
+              Yeet("Reply Yeet", true),
+              SizedBox(height: 15,)
+            ],
+          ),
+        ),
+        Reply().buildReplies(replyList),
+        replyComposer()
+      ],
+      )
     );
   }
 }
 
-List<String> replies = ["First reply", "A second reply", "Now this is a third reply", "Fourth", "Fifth Reply"];
+// Reply composer: chat UI video 59:00
 
-Widget buildReplies() {
-  return new Column(
-    children: replies.map((reply) => new Reply(reply)).toList()
-  );
+Widget replyComposer() {
+  return Text("Reply Composer");
 }
+
+List<String> replyList = ["First reply", "A second reply", "Now this is a third reply", "Fourth", ];
 

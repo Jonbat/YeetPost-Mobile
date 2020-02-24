@@ -1,52 +1,67 @@
 import 'package:flutter/material.dart';
-
-class WriteYeet extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: WriteYeetPage(),
-    );
-  }
-}
-
-class WriteYeetPage extends StatefulWidget {
-  @override
-  WriteYeetPageState createState() => WriteYeetPageState();
-}
+import 'CustomButton.dart';
 
 String profileName = "Profile name";
 var dropdownValue;
 
-class WriteYeetPageState extends State<WriteYeetPage> {
+class WriteYeet extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return WriteYeetState();
+  }
+}
+
+class WriteYeetState extends State<WriteYeet> {
 
   Widget buildDropdown(BuildContext context) {
-    return DropdownButton<String >(
-      value: dropdownValue,
-      icon: Icon(Icons.arrow_downward),
-      isExpanded: true,
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(
-        color: Colors.grey[600]
-      ),
-      underline: Container(
-        height: 2,
-        color: Colors.grey[600],
-      ),
-      onChanged: (String newValue) {
-        setState(() {
-          dropdownValue = newValue;
-        });
-      },
-      items: <String>['One', 'Two', 'Free', 'Four']
-        .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        })
-        .toList(),
-      );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Icon(
+          Icons.location_on,
+          color: Color(0xFF21BFBD),
+          size: 30.0
+        ),
+        Container(
+          width: 290,
+          child: DropdownButton<String>( 
+            
+            hint: Text("Choose a Location"),
+            value: dropdownValue,
+            isExpanded: true,
+            icon: Icon(
+              Icons.arrow_downward,
+              color: Color(0xFF21BFBD),
+              size: 30.0
+            ),
+            iconSize: 30,
+            elevation: 16,
+            underline: Container(
+              height: 1,
+              color: Colors.grey[600],
+            ),
+            onChanged: (String newValue) {
+              setState(() {
+                dropdownValue = newValue;
+              });
+            },
+            items: <String>['SAU', 'Two', 'Free', 'Four']
+            .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value,
+                  style: TextStyle(
+                  color: Colors.grey[800],
+                  fontSize: 20
+                  )
+                ),
+              );
+            })
+            .toList(),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -59,7 +74,7 @@ class WriteYeetPageState extends State<WriteYeetPage> {
           borderRadius: BorderRadius.only(topRight: Radius.circular(60.0)),//75
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20, bottom: 20, right: 40),
+          padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -72,7 +87,8 @@ class WriteYeetPageState extends State<WriteYeetPage> {
                   fontWeight: FontWeight.bold
                 )
               ),
-              SizedBox(height: 25.0,),
+              SizedBox(height: 30.0,),
+              /*
               Text(
                 'Choose Location',
                 style: TextStyle(
@@ -82,30 +98,25 @@ class WriteYeetPageState extends State<WriteYeetPage> {
                   fontWeight: FontWeight.bold
                 )
               ),
+              */
               buildDropdown(context),
-              SizedBox(height: 10.0,),
+              SizedBox(height: 30.0,),
               TextFormField(
+                maxLength: 150,
                 decoration: InputDecoration(
                   labelText: "Yeet text...",
-                  fillColor: Colors.black,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(25.0),
-                    borderSide: BorderSide(
-                    ),
-                  ),
                 ),
                 validator: (val) {
-                  if (val.length > 15) {
-                    return "Name can't be longer than 15 characters";
+                  if (val.length > 150) {
+                    return "Yeet can't be longer than 15 characters";
                   } else {
                     return null;
                   }
                 },
                 keyboardType: TextInputType.text,
-                style: TextStyle(
-                  fontFamily: "Poppins",
-                ),
               ),
+              SizedBox(height: 20.0,),
+              CustomButton('Send Yeet')
             ]
           ),
         ),

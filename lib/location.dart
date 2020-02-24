@@ -1,20 +1,7 @@
+import 'package:first_app/yeetPage.dart';
 import 'package:flutter/material.dart';
 
 class Location extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LocationPage(),
-    );
-  }
-}
-
-class LocationPage extends StatefulWidget {
-  @override
-  LocationPageState createState() => LocationPageState();
-}
-
-class LocationPageState extends State<LocationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +27,7 @@ class LocationPageState extends State<LocationPage> {
                 )
               ),
             ),
-            buildLocations()
+            buildLocations(context)
           ],
         )
       )
@@ -50,7 +37,7 @@ class LocationPageState extends State<LocationPage> {
 
 List<String> locations = ["SAU", "Duck", "Banana", "ChickenDuck", "Cow", "Frog", "Fish", "dog" , "dog", "dog", "dog", "dog"];
 
-Widget buildLocations() {
+Widget buildLocations(context) {
   return ListView.separated(
     physics: ScrollPhysics(),
     padding: EdgeInsets.only(left: 50, right: 50),
@@ -60,34 +47,39 @@ Widget buildLocations() {
       return Divider();
     },
     itemBuilder: (BuildContext context, int index) {
-      return buildLocation(locations[index]);
+      return buildLocation(context, locations[index]);
     }
   );
 }
 
-Widget buildLocation(String locationName) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Row(
-        children: [
-          SizedBox(height: 75.0, width: 5.0),
-          Text(
-            locationName,
-            style: TextStyle(
-              color: Colors.grey[950],
-              fontFamily: 'Montserrat',
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold
+Widget buildLocation(context, String locationName) {
+  return InkWell(
+    onTap: () { 
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => YeetPage(locationName))
+        );
+      print(locationName);
+    },
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            SizedBox(height: 75.0, width: 5.0,),
+            Text(
+              locationName,
+              style: TextStyle(
+                color: Colors.grey[950],
+                fontFamily: 'Montserrat',
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+              )
             )
-          )
-        ]
-      ),
-      IconButton(
-        icon: Icon(Icons.arrow_forward_ios),
-        color: Colors.grey[600],
-        onPressed: () {}
-      ),
-    ],
+          ]
+        ),
+        Icon(Icons.arrow_forward_ios, color: Colors.grey[600]),
+      ],
+    ),
   );
 }
