@@ -34,7 +34,7 @@ class Profile extends StatelessWidget {
           TextFormField(
             focusNode: null,
             decoration: InputDecoration(
-              labelText: "New Name",
+              labelText: "New Name...",
               // change label color on focus: https://stackoverflow.com/questions/56411599/flutter-textformfield-change-labelcolor-on-focus/56411859
             ),
             validator: (val) {

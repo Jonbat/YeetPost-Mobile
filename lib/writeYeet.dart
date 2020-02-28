@@ -25,7 +25,6 @@ class WriteYeetState extends State<WriteYeet> {
         Container(
           width: 290,
           child: DropdownButton<String>( 
-            
             hint: Text("Choose a Location"),
             value: dropdownValue,
             isExpanded: true,
@@ -88,17 +87,6 @@ class WriteYeetState extends State<WriteYeet> {
                 )
               ),
               SizedBox(height: 30.0,),
-              /*
-              Text(
-                'Choose Location',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontFamily: 'Montserrat',
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              */
               buildDropdown(context),
               SizedBox(height: 30.0,),
               TextFormField(
