@@ -73,7 +73,7 @@ class Profile extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('Logout', style: TextStyle(fontSize: 24.0)),
+                  Text('Sign Out', style: TextStyle(fontSize: 24.0)),
                 ],
               )
             ),
