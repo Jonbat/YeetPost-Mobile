@@ -1,5 +1,5 @@
 # YeetPost-Mobile
-A cross-platform, mobile mobile messing application!
+A cross-platform, mobile mobile messaging application!
 
 # Installation
 * [Flutter installtion guide](https://flutter.dev/docs/get-started/install)
