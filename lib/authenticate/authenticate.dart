@@ -1,4 +1,4 @@
-import 'package:first_app/authenticate/signIn.dart';
+import 'package:yeetpost/authenticate/signIn.dart';
 import 'package:flutter/material.dart';
 
 class Authenticate extends StatefulWidget {

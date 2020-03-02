@@ -1,4 +1,4 @@
-package com.example.first_app
+package com.example.yeetpost
 
 import android.os.Bundle
 

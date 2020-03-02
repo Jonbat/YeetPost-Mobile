@@ -1,5 +1,5 @@
-import 'package:first_app/customTextBox.dart';
-import 'package:first_app/replyPage.dart';
+import 'customTextBox.dart';
+import 'replyPage.dart';
 import 'package:flutter/material.dart';
 import 'custom_icons.dart';
 

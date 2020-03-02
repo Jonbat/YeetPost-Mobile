@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:first_app/location.dart';
+import 'package:yeetpost/location.dart';
 
 void main() {
   testWidgets('Location renders correctly', (WidgetTester tester) async {

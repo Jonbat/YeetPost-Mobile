@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'customButton.dart';
+import 'services/auth.dart';
 
 class Profile extends StatelessWidget {
+  final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,7 +22,7 @@ class Profile extends StatelessWidget {
           ),
           //SizedBox(height: 50.0,),
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 20, right: 40, bottom: 1),
+            padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),
             child: Text(
               'Current Name : Anonymous',
               style: TextStyle(
@@ -49,8 +51,36 @@ class Profile extends StatelessWidget {
               fontFamily: "Poppins",
             ),
           ),
-          SizedBox(height: 25.0,),
-          CustomButton('Set name')
+          SizedBox(height: 10.0,),
+          RaisedButton(
+            textColor: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('Set name', style: TextStyle(fontSize: 24.0)),
+                ],
+              )
+            ),
+            onPressed: () {},
+          ),
+          SizedBox(height: 20.0,),
+          RaisedButton(
+            textColor: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('Logout', style: TextStyle(fontSize: 24.0)),
+                ],
+              )
+            ),
+            onPressed: () async {
+              await _auth.signOut();
+            },
+          )
         ]
       ),
     );

@@ -1,11 +1,20 @@
-import 'package:first_app/authenticate/authenticate.dart';
+import 'authenticate/authenticate.dart';
 import 'package:flutter/material.dart';
-// import 'appBarWrapper.dart';
+import 'package:provider/provider.dart';
+import 'models/user.dart';
+import 'appBarWrapper.dart';
 
 
 class AuthenticationWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Authenticate();
+
+    final user = Provider.of<User>(context);
+
+    if (user == null) {
+      return Authenticate();
+    } else {
+      return AppBarWrapper();
+    }
   }
 }

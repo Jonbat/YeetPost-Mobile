@@ -1,4 +1,4 @@
-import 'package:first_app/yeetPage.dart';
+import 'yeetPage.dart';
 import 'package:flutter/material.dart';
 
 class Location extends StatelessWidget {

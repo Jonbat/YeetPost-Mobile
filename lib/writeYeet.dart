@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'CustomButton.dart';
 
 String profileName = "Profile name";
 var dropdownValue;
@@ -104,7 +103,19 @@ class WriteYeetState extends State<WriteYeet> {
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20.0,),
-              CustomButton('Send Yeet')
+              RaisedButton(
+                textColor: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text('Send Yeet', style: TextStyle(fontSize: 24.0)),
+                    ],
+                  )
+                ),
+                onPressed: () {},
+              )
             ]
           ),
         ),
