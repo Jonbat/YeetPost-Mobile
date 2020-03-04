@@ -1,4 +1,3 @@
-import 'package:yeetpost/authenticate/register.dart';
 import 'package:yeetpost/authenticate/signIn.dart';
 import 'package:flutter/material.dart';
 

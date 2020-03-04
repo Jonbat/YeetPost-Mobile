@@ -51,6 +51,12 @@ class MyApp extends StatelessWidget {
                 color: Color(0xFF21BFBD),
               ),
             ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(25.0),
+              borderSide: BorderSide(
+                color: Colors.red,
+              ),
+            ),
           )
         ),
       ),

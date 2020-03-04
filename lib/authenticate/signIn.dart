@@ -1,5 +1,6 @@
 import 'package:yeetpost/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:yeetpost/loading.dart';
 import 'register.dart';
 
 class SignIn extends StatefulWidget {
@@ -10,13 +11,16 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
-  // text field stats
-  String email = '';
-  String password = '';
+  final _formkey = GlobalKey<FormState>();
+  bool loading = false;
+
+  String email;
+  String password;
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF21BFBD),
         elevation: 0,
@@ -25,25 +29,34 @@ class _SignInState extends State<SignIn> {
       body: Padding(
         padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             signInField(),
             SizedBox(height: 20),
             Text("Don\'t have an account?"),
+            SizedBox(height: 5),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                RaisedButton(
-                  textColor: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('Sign in anonymously', style: TextStyle(fontSize: 14.0)),
-                      ],
-                    ),
+                InkWell(
+                  child: Text("Register", 
+                    style: TextStyle(color: Color(0xFF21BFBD)
+                    )
                   ),
-                  onPressed: () async {
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Register())
+                    );
+                  },
+                ),
+                Text("  or  ",),
+                InkWell(
+                  child: Text("Sign in anonymously", 
+                    style: TextStyle(color: Color(0xFF21BFBD)
+                    )
+                  ),
+                  onTap: () async {
                     dynamic result = await _auth.signInAnon();
                     if (result == null) {
                       print('error signing in');
@@ -53,27 +66,8 @@ class _SignInState extends State<SignIn> {
                     }
                   },
                 ),
-                Text("Or",),
-                RaisedButton(
-                  textColor: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('Register', style: TextStyle(fontSize: 14.0)),
-                      ],
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Register())
-                      );
-                  },
-                ),
-              ],
-            ),
+              ]
+            )
           ],
         ),
       )
@@ -82,12 +76,14 @@ class _SignInState extends State<SignIn> {
 
   Widget signInField() {
     return Form(
+      key: _formkey,
       child: Column(
         children: [
           TextFormField(
             decoration: InputDecoration(
               labelText: "Email",
             ),
+            validator: (val) => val.isEmpty ? 'Enter an email' : null,
             onChanged: (val){
               setState(() => email = val);
             }
@@ -98,6 +94,7 @@ class _SignInState extends State<SignIn> {
             decoration: InputDecoration(
               labelText: "Password",
             ),
+            validator: (val) => val.length < 6 ? 'Enter a password 6+ chars long' : null,
             onChanged: (val){
               setState(() => password = val);
             }
@@ -114,11 +111,26 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
             ),
-            onPressed: () {
-              print(email);
-              print(password);
+            onPressed: () async {
+              if (_formkey.currentState.validate()) {
+                setState(() {
+                  loading = true;
+                });
+                dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                if (result == null) {
+                  setState(() {
+                    error = 'Could not sign in';
+                    loading = false;
+                  });
+                }
+              }
             },
           ),
+          SizedBox(height: 10),
+          Text(
+            error,
+            style: TextStyle(color: Colors.red),
+          )
         ],
       ),
     );
