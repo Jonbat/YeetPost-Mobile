@@ -5,10 +5,12 @@ import 'custom_icons.dart';
 
 class Yeet extends StatefulWidget {
   final String yeetText;
+  final String author;
   final bool disableReplyButton;
   final int upvoteCount;
   final int flagCount;
-  Yeet([this.yeetText, this.disableReplyButton, this.upvoteCount, this.flagCount]);
+
+  Yeet([this.yeetText, this.disableReplyButton, this.author, this.upvoteCount, this.flagCount]);
   @override
   State<StatefulWidget> createState() {
     return YeetState(yeetText, disableReplyButton);

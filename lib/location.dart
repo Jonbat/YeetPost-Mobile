@@ -1,7 +1,9 @@
 import 'yeetPage.dart';
 import 'package:flutter/material.dart';
+import 'services/database.dart';
 
 class Location extends StatelessWidget {
+  //List<String> locations = ["SAU", "Duck", "Banana", "ChickenDuck", "Cow", "Frog", "Fish", "dog" , "dog", "dog", "dog", "dog"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,30 +37,36 @@ class Location extends StatelessWidget {
   }
 }
 
-List<String> locations = ["SAU", "Duck", "Banana", "ChickenDuck", "Cow", "Frog", "Fish", "dog" , "dog", "dog", "dog", "dog"];
-
 Widget buildLocations(context) {
-  return ListView.separated(
-    physics: ScrollPhysics(),
-    padding: EdgeInsets.only(left: 50, right: 50),
-    shrinkWrap: true,
-    itemCount: locations.length,
-    separatorBuilder: (context, index) {
-      return Divider();
-    },
-    itemBuilder: (BuildContext context, int index) {
-      return buildLocation(context, locations[index]);
+   return StreamBuilder<List<String>> (
+    stream: DatabaseService().locations,
+    builder: (context, locationsList) {
+      return ListView.separated(
+        physics: ScrollPhysics(),
+        padding: EdgeInsets.only(left: 50, right: 50),
+        shrinkWrap: true,
+        itemCount: locationsList.hasData ? locationsList.data.length : 0,
+        separatorBuilder: (context, index) {
+          return Divider();
+        },
+        itemBuilder: (context, index) {
+          return buildLocationTile(
+            context, locationsList.data[index]
+            //locations[index] //locationsList.data[index]
+          );
+        }
+      );
     }
   );
 }
 
-Widget buildLocation(context, String locationName) {
+Widget buildLocationTile(context, String locationName) {
   return InkWell(
     onTap: () { 
       Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => YeetPage(locationName))
-        );
+        context,
+        MaterialPageRoute(builder: (context) => YeetPage(locationName))
+      );
       print(locationName);
     },
     child: Row(

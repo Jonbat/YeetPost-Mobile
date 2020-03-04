@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'services/database.dart';
 
 String profileName = "Profile name";
-var dropdownValue;
+String dropdownValue;
 
 class WriteYeet extends StatefulWidget {
   @override
@@ -12,53 +13,121 @@ class WriteYeet extends StatefulWidget {
 
 class WriteYeetState extends State<WriteYeet> {
 
+  final _formkey = GlobalKey<FormState>();
+  String yeetText;
+  bool loading = false;
+  String error = '';
+
   Widget buildDropdown(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Icon(
-          Icons.location_on,
-          color: Color(0xFF21BFBD),
-          size: 30.0
-        ),
-        Container(
-          width: 290,
-          child: DropdownButton<String>( 
-            hint: Text("Choose a Location"),
-            value: dropdownValue,
-            isExpanded: true,
-            icon: Icon(
-              Icons.arrow_downward,
+    return StreamBuilder<List<String>> (
+      stream: DatabaseService().locations,
+      builder: (context, locations) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Icons.location_on,
               color: Color(0xFF21BFBD),
               size: 30.0
             ),
-            iconSize: 30,
-            elevation: 16,
-            underline: Container(
-              height: 1,
-              color: Colors.grey[600],
-            ),
-            onChanged: (String newValue) {
-              setState(() {
-                dropdownValue = newValue;
-              });
-            },
-            items: <String>['SAU', 'Two', 'Free', 'Four']
-            .map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value,
-                  style: TextStyle(
-                  color: Colors.grey[800],
-                  fontSize: 20
-                  )
+            Container(
+              width: 290,
+              child: DropdownButton<String>( 
+                hint: Text("Choose a Location"),
+                value: dropdownValue,
+                isExpanded: true,
+                icon: Icon(
+                  Icons.arrow_downward,
+                  color: Color(0xFF21BFBD),
+                  size: 30.0
                 ),
-              );
-            })
-            .toList(),
+                iconSize: 30,
+                elevation: 16,
+                underline: Container(
+                  height: 1,
+                  color: Colors.grey[600],
+                ),
+                onChanged: (String newValue) {
+                  setState(() {
+                    dropdownValue = newValue;
+                  });
+                },
+                items: 
+                  locations.hasData ? locations.data.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value,
+                        style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 16
+                        )
+                      ),
+                    );
+                  })
+                  .toList()
+                : null
+              ),
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  Widget yeetInputField() {
+    return Form(
+      key: _formkey,
+      child: Column(
+        children: [
+          TextFormField(
+            textCapitalization: TextCapitalization.sentences,
+            maxLength: 150,
+            decoration: InputDecoration(
+              labelText: "Yeet text...",
+            ),
+            validator: (val) => val.isEmpty ? 'Enter a yeet' : null,
+            onChanged: (val){
+              setState(() => yeetText = val);
+            }
           ),
-        ),
-      ],
+          SizedBox(height: 20),
+          RaisedButton(
+            textColor: Colors.white,
+            child: Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('Yeet', style: TextStyle(fontSize: 24.0)),
+                ],
+              ),
+            ),
+            onPressed: () async {
+              if (_formkey.currentState.validate()) {
+                setState(() {
+                  loading = true;
+                });
+                DatabaseService().writeYeet("Southern Adventist University", "test author", yeetText);
+                
+                // dynamic result =  DatabaseService().writeYeet(location, author, yeetText);//_auth.signInWithEmailAndPassword(email, password);
+                /*
+                if (result == null) {
+                  setState(() {
+                    error = 'Could not yeet';
+                    loading = false;
+                  });
+                }
+                */
+              }
+            },
+          ),
+          SizedBox(height: 10),
+          Text(
+            error,
+            style: TextStyle(color: Colors.red),
+          )
+        ],
+      ),
     );
   }
 
@@ -88,18 +157,16 @@ class WriteYeetState extends State<WriteYeet> {
               SizedBox(height: 30.0,),
               buildDropdown(context),
               SizedBox(height: 30.0,),
+
+              yeetInputField(),
+
+              /*
               TextFormField(
+                textCapitalization: TextCapitalization.sentences,
                 maxLength: 150,
                 decoration: InputDecoration(
                   labelText: "Yeet text...",
                 ),
-                validator: (val) {
-                  if (val.length > 150) {
-                    return "Yeet can't be longer than 15 characters";
-                  } else {
-                    return null;
-                  }
-                },
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 20.0,),
@@ -110,17 +177,23 @@ class WriteYeetState extends State<WriteYeet> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Text('Send Yeet', style: TextStyle(fontSize: 24.0)),
+                      Text('Yeet', style: TextStyle(fontSize: 24.0)),
                     ],
                   )
                 ),
                 onPressed: () {},
               )
+              */
             ]
           ),
         ),
       )
     );
   }
+
+    
+    
 }
+
+
 

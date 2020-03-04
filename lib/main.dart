@@ -32,8 +32,7 @@ class MyApp extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30.0)
             )
-          ),
-                // textCapitalization: TextCapitalization.sentences,
+          ), 
           inputDecorationTheme: InputDecorationTheme(
             labelStyle: TextStyle(
               color: Colors.grey,
