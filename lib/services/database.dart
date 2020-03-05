@@ -3,12 +3,13 @@ import 'package:yeetpost/models/yeetModel.dart';
 
 class DatabaseService {
 
-  // collection reference
+  final CollectionReference yeetCollection = Firestore.instance.collection('yeets');
   final CollectionReference locationCollection = Firestore.instance.collection('locations');
 
   void writeYeet(String location, String author, String yeetText) {
-    locationCollection.document(location).collection('yeets').document().setData({
+    yeetCollection.document().setData({
       'author' : author,
+      'location' : location,
       'text' : yeetText,
       'time' : Timestamp.now(),
       'upvoteCount' : 0,
@@ -27,16 +28,17 @@ class DatabaseService {
     }).toList();
   }
 
-  Stream<List<YeetModel>> getYeets(String location) {
+  Stream<List<YeetModel>> getLocationYeets(String location) {
     return 
-    locationCollection.document(location).collection('yeets').snapshots()
-      .map(_yeetListFromSnapshot);
+    yeetCollection.where('location', isEqualTo: location).snapshots()
+      .map(_locationYeetsFromSnapshot);
   }
 
-  List<YeetModel> _yeetListFromSnapshot(QuerySnapshot snapshot) {
+  List<YeetModel> _locationYeetsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return YeetModel(
         author: doc.data['author'],
+        location: doc.data['location'],
         text: doc.data['text'],
         time: doc.data['time'],
         upvoteCount: doc.data['upvoteCount'],
@@ -46,10 +48,11 @@ class DatabaseService {
     }).toList();
   }
 
-  Stream<YeetModel> getSingleYeet(String location, String yeetId) { 
-    return locationCollection.document(location).collection('yeets').document().snapshots().map((doc) {
+  Stream<YeetModel> getSingleYeet(String yeetId) { 
+    return yeetCollection.document(yeetId).snapshots().map((doc) {
       return YeetModel(
-        author: doc.data['author'],
+        author: doc['author'],
+        location: doc.data['location'],
         text: doc.data['text'],
         time: doc.data['time'],
         upvoteCount: doc.data['upvoteCount'],
@@ -58,10 +61,10 @@ class DatabaseService {
     });
   }
 
-  Stream<List<YeetModel>> getReplies(String location) {
+  Stream<List<YeetModel>> getReplies(String yeetId) {
     return 
-    locationCollection.document(location).collection('yeets').snapshots()
-      .map(_yeetListFromSnapshot);
+    yeetCollection.document(yeetId).collection('replies').snapshots()
+      .map(_repliesFromSnapshot);
   }
 
   List<YeetModel> _repliesFromSnapshot(QuerySnapshot snapshot) {

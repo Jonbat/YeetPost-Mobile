@@ -24,7 +24,7 @@ class LocationYeetsState extends State<LocationYeets> {
 
   Widget build(BuildContext context) {
     return StreamBuilder<List<YeetModel>> (
-      stream: DatabaseService().getYeets(location),
+      stream: DatabaseService().getLocationYeets(location),
       builder: (context, yeetData) {
         return ListView.separated(
           physics: ScrollPhysics(),

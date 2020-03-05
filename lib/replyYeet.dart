@@ -6,22 +6,22 @@ import 'package:flutter/material.dart';
 import 'custom_icons.dart';
 
 class ReplyYeet extends StatefulWidget {
-  String location, yeetId;
-  ReplyYeet(this.location, this.yeetId);
+  String yeetId;
+  ReplyYeet(this.yeetId);
   @override
   State<StatefulWidget> createState() {
-    return ReplyYeetState(location, yeetId);
+    return ReplyYeetState(yeetId);
   }
 }
 
 class ReplyYeetState extends State<ReplyYeet> {
   bool flagPressed, upvotePressed = false;
   String location, yeetId;
-  ReplyYeetState(location, yeetId);
+  ReplyYeetState(yeetId);
 
   Widget build(BuildContext context) {
     return StreamBuilder<YeetModel> (
-      stream: DatabaseService().getSingleYeet(location, yeetId),
+      stream: DatabaseService().getSingleYeet(yeetId),
       builder: (context, yeetData) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -7,6 +7,7 @@ class YeetModel {
   final int upvoteCount;
   final int flagCount;
   final String yeetId;
+  final String location;
 
-  YeetModel({this.author, this.text, this.time, this.upvoteCount, this.flagCount, this.yeetId,});  
+  YeetModel({this.author, this.text, this.time, this.upvoteCount, this.flagCount, this.yeetId, this.location});  
 }
