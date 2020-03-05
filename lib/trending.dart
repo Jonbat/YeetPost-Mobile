@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
-import 'yeet.dart';
+import 'package:yeetpost/locationYeets.dart';
 
-
-List<String> trendingYeets = ["Trending yeet 1", "Trending yeet 2", "Banana", "Tomato", "Pancake"];
+/*
+List<YeetModel> trendingYeets = [
+  YeetModel(
+    author: 'example author',
+    text: 'example text',
+    time: Timestamp.now(),
+    upvoteCount: 1,
+    flagCount: 1
+  ),
+  YeetModel(
+    author: 'example author 2',
+    text: 'example text 2',
+    time: Timestamp.now(),
+    upvoteCount: 1,
+    flagCount: 1
+  ),
+];
+*/
 
 class Trending extends StatelessWidget {
   @override
@@ -21,7 +37,7 @@ class Trending extends StatelessWidget {
             )
           ),
         ),
-        Yeet().buildYeets(trendingYeets)
+        LocationYeets('Southern Adventist University')
       ],
     );
   }

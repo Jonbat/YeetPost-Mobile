@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'yeet.dart';
+import 'package:yeetpost/replyYeet.dart';
 import 'reply.dart';
 
 class ReplyPage extends StatelessWidget {
+
+  String location, yeetId;
+  ReplyPage(location, yeetId);
+
  @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +27,7 @@ class ReplyPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 40, right: 40),
                     child: Column(
                       children: <Widget>[
-                        Yeet("Reply Yeet", true),
+                        ReplyYeet(location, yeetId),
                         SizedBox(height: 15,)
                       ],
                     ),
@@ -72,4 +76,6 @@ Widget replyComposer() {
 }
 
 List<String> replyList = ["First reply", "A second reply", "Now this is a third reply", "Fourth", ];
+  
+
 

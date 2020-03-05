@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'yeet.dart';
+import 'package:yeetpost/locationYeets.dart';
+import 'models/yeetModel.dart';
 
 class YeetPage extends StatelessWidget {
   final location;
@@ -15,10 +17,28 @@ class YeetPage extends StatelessWidget {
           backgroundColor: Color(0xFF21BFBD),
       ),
       backgroundColor: Colors.white,
-      body: Yeet().buildYeets(locationYeets)
+      // build yeets, based on location
+      body: LocationYeets(location)
     );
   }
 }
+
+List<YeetModel> trendingYeets = [
+  YeetModel(
+    author: 'example author',
+    text: 'example text',
+    time: Timestamp.now(),
+    upvoteCount: 1,
+    flagCount: 1
+  ),
+  YeetModel(
+    author: 'example author 2',
+    text: 'example text 2',
+    time: Timestamp.now(),
+    upvoteCount: 1,
+    flagCount: 1
+  ),
+];
 
 List<String> locationYeets = ["Location yeet 1", "Location yeet 2", "Location", "Location", "Location"];
 

@@ -10,13 +10,13 @@ class Reply extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [        
-        createText(replyText),
+        makeText(replyText),
         makeUpvotes()
       ],
     );
   }
 
-  Widget createText(replyText) {
+  Widget makeText(replyText) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[

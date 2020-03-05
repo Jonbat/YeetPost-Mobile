@@ -90,7 +90,7 @@ class WriteYeetState extends State<WriteYeet> {
               setState(() => yeetText = val);
             }
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           RaisedButton(
             textColor: Colors.white,
             child: Padding(
@@ -136,63 +136,38 @@ class WriteYeetState extends State<WriteYeet> {
     return Scaffold(
       backgroundColor: Color(0xFF21BFBD),
       body: Container(
+        height: MediaQuery.of(context).size.height - 80.0,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(topRight: Radius.circular(60.0)),//75
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Create Yeet',
-                style: TextStyle(
-                  color: Colors.grey[800],
-                  fontFamily: 'Montserrat',
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              SizedBox(height: 30.0,),
-              buildDropdown(context),
-              SizedBox(height: 30.0,),
-
-              yeetInputField(),
-
-              /*
-              TextFormField(
-                textCapitalization: TextCapitalization.sentences,
-                maxLength: 150,
-                decoration: InputDecoration(
-                  labelText: "Yeet text...",
-                ),
-                keyboardType: TextInputType.text,
-              ),
-              SizedBox(height: 20.0,),
-              RaisedButton(
-                textColor: Colors.white,
-                child: Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text('Yeet', style: TextStyle(fontSize: 24.0)),
-                    ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Create Yeet',
+                  style: TextStyle(
+                    color: Colors.grey[800],
+                    fontFamily: 'Montserrat',
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold
                   )
                 ),
-                onPressed: () {},
-              )
-              */
-            ]
+                SizedBox(height: 30.0,),
+                buildDropdown(context),
+                SizedBox(height: 35.0,),
+                yeetInputField()
+              ]
+            ),
           ),
         ),
       )
     );
   }
 
-    
-    
 }
 
 

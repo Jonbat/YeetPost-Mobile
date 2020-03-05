@@ -28,22 +28,22 @@ class AppBarWrapperState extends State<AppBarWrapper> with SingleTickerProviderS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          /* 
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        /* 
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(30),
+            ),
+          ),
+        */
+        elevation: 0.0, // no shadow
+        backgroundColor: Color(0xFF21BFBD),
+        flexibleSpace: SafeArea(
+          child: getTabBar(),
         ),
       ),
-      */
-          elevation: 0.0, // no shadow
-          backgroundColor: Color(0xFF21BFBD),
-          flexibleSpace: SafeArea(
-            child: getTabBar(),
-          ),
-        ),
-        body: getTabBarPages());
+      body: getTabBarPages());
   }
 
   Widget getTabBar() {

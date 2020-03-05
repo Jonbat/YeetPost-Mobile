@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:yeetpost/models/yeet.dart';
+import 'package:yeetpost/models/yeetModel.dart';
 
 class DatabaseService {
 
@@ -16,16 +16,9 @@ class DatabaseService {
     });
   }
 
-  List<YeetModel> _yeetListFromSnapshot(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
-      return YeetModel(
-        uid: doc.data['uid'],
-        text: doc.data['text'],
-        upvotes: doc.data['upvotes'] ?? 0,
-        flags: doc.data['flags'] ?? 0,
-        replies: doc.data['replies'] ?? 0
-      );
-    }).toList();
+  Stream<List<String>> get locations {
+    return locationCollection.snapshots()
+      .map(_locationListFromSnapshot);
   }
 
   List<String> _locationListFromSnapshot(QuerySnapshot snapshot) {
@@ -34,14 +27,73 @@ class DatabaseService {
     }).toList();
   }
 
-  Stream<List<String>> get locations {
-    return locationCollection.snapshots()
-      .map(_locationListFromSnapshot);
+  Stream<List<YeetModel>> getYeets(String location) {
+    return 
+    locationCollection.document(location).collection('yeets').snapshots()
+      .map(_yeetListFromSnapshot);
   }
 
-  // write Yeet
+  List<YeetModel> _yeetListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return YeetModel(
+        author: doc.data['author'],
+        text: doc.data['text'],
+        time: doc.data['time'],
+        upvoteCount: doc.data['upvoteCount'],
+        flagCount: doc.data['flagCount'],
+        yeetId: doc.documentID,
+      );
+    }).toList();
+  }
 
+  Stream<YeetModel> getSingleYeet(String location, String yeetId) { 
+    return locationCollection.document(location).collection('yeets').document().snapshots().map((doc) {
+      return YeetModel(
+        author: doc.data['author'],
+        text: doc.data['text'],
+        time: doc.data['time'],
+        upvoteCount: doc.data['upvoteCount'],
+        flagCount: doc.data['flagCount'],
+      );
+    });
+  }
 
-  // 1 collection: locations
-  //  - locations: contains all yeets from a collection
+  Stream<List<YeetModel>> getReplies(String location) {
+    return 
+    locationCollection.document(location).collection('yeets').snapshots()
+      .map(_yeetListFromSnapshot);
+  }
+
+  List<YeetModel> _repliesFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return YeetModel(           // replies use the same model as
+        author: doc.data['author'],
+        text: doc.data['text'],
+        time: doc.data['time'],
+        upvoteCount: doc.data['upvoteCount'],
+        flagCount: doc.data['flagCount'],
+      );
+    }).toList();
+  }
+
+  String formatTime(num totalseconds) {
+    if (totalseconds > 3600) {
+      return (totalseconds ~/ 3600).toString() + 'h';
+    } else if (totalseconds > 60) {
+      return ((totalseconds ~/ 60) % 60).toString() + 'm';
+    } else {
+      return totalseconds.round().toString() + 's';
+    }
+  }
+
+  /*
+  Two collections: 
+    Trending: Order yeets by upvote, limit to 10
+    LocationPage: Query all yeets where location == ''
+
+  One collection:
+    Trending: Get all yeets from all locations, order by upvote and limit to 10
+
+  */
+
 }
