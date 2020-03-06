@@ -19,6 +19,24 @@ class DatabaseService {
     });
   }
 
+  Stream<String> getUserName(String userId) {
+    return userCollection.document(userId).snapshots().map((doc) {
+      if (doc['name'] == null) {
+        return 'Anonymous';
+      } else {
+        return doc['name'];
+      }
+    });
+  }
+
+  Stream<String> changeName(String userId, String newName) {
+    return userCollection.document(userId).setData({
+      'name' : newName,
+    }).then((doc) {
+      return newName;
+    }).asStream();
+  }
+
   Stream<UpvoteFlagData> getUpvoteData(String userId, String yeetId) {
     // User:
       // upvotes: all ids of yeets that have been upvoted

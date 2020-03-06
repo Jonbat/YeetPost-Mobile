@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:yeetpost/services/database.dart';
 import 'models/user.dart';
 import 'services/auth.dart';
 
@@ -9,9 +10,9 @@ class Profile extends StatelessWidget {
   final AuthService _auth = AuthService();
   final _formkey = GlobalKey<FormState>();
   //String error = "something";
-  String newName;
-
-  Widget nameInputField() {
+  
+  Widget nameInputField(String userId) {
+    String newName;
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Form(
@@ -25,7 +26,7 @@ class Profile extends StatelessWidget {
                   labelText: "New name",
                 ),
                 validator: (val) => val.isEmpty ? 'Enter a name' : null,
-                onChanged: (val){
+                onChanged: (val) {
                   setState(() => newName = val);
                 }
               ),
@@ -43,7 +44,7 @@ class Profile extends StatelessWidget {
                 ),
                 onPressed: () async {
                   if (_formkey.currentState.validate()) {
-                    _auth.changeDisplayName(newName);
+                    DatabaseService().changeName(userId, newName);
                   }
                 },
               ),
@@ -81,18 +82,24 @@ class Profile extends StatelessWidget {
             ),
             //SizedBox(height: 50.0,),
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),
-              child: Text(
-                'Current Name : ' + user.name,
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontFamily: 'Montserrat',
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold
-                )
+              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 2, right: 40,),
+              child: StreamBuilder<String>(
+                stream: DatabaseService().getUserName(user.uid),
+                builder: (context, returnedName) {
+                  return Text(
+                    returnedName.hasData ? 'Current Name : ' + returnedName.data
+                    : 'loading...',
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontFamily: 'Montserrat',
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold
+                    )
+                  );
+                }
               ),
             ),
-            nameInputField(),
+            nameInputField(user.uid),
             SizedBox(height: 30.0,),
             RaisedButton(
               textColor: Colors.white,
