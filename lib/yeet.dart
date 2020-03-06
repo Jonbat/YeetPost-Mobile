@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'package:yeetpost/models/yeetModel.dart';
 import 'package:yeetpost/services/database.dart';
 import 'customTextBox.dart';
 import 'custom_icons.dart';
+import 'models/upvoteFlagData.dart';
+import 'models/user.dart';
 import 'replyPage.dart';
 import 'package:flutter/material.dart';
+import 'loadingIcon.dart';
 
 class Yeet {
   String location;
@@ -23,12 +27,11 @@ class Yeet {
             return Divider();
           },
           itemBuilder: (BuildContext context, int index) {
-            //print(yeetData.data[index].upvoteCount);
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [        
                 createText(context, yeetData.data[index]),
-                makeUpvote(yeetData.data[index].upvoteCount)
+                makeUpvote(context, yeetData.data[index].upvotes, yeetData.data[index].yeetId,)
               ],
             );
           }
@@ -54,7 +57,7 @@ class Yeet {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [        
                 createText(context, yeetData.data[index]),
-                makeUpvote(yeetData.data[index].upvoteCount)
+                makeUpvote(context, yeetData.data[index].upvotes, yeetData.data[index].yeetId,)
               ],
             );
           }
@@ -63,7 +66,7 @@ class Yeet {
     );
   }
 
-  Widget buildReplyYeet(BuildContext context, yeetId) {
+  Widget buildReplyYeet(yeetId) {
     return StreamBuilder<YeetModel> (
       stream: DatabaseService().getSingleYeet(yeetId),
       builder: (context, yeetData) {
@@ -72,7 +75,7 @@ class Yeet {
           children: [        
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:[
+              children: yeetData.hasData ? [
                 SizedBox(height: 20.0),
                 Text(yeetData.data.author, style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
                 SizedBox(height: 8.0),
@@ -90,9 +93,9 @@ class Yeet {
                     ),
                   ],
                 ),
-              ]
+              ] : [LoadingIcon(30)]
             ),
-            makeUpvote(yeetData.data.upvoteCount)
+            yeetData.hasData ? makeUpvote(context, yeetData.data.upvotes, yeetData.data.yeetId,) : LoadingIcon(15)
           ],
         );
       }
@@ -134,45 +137,51 @@ class Yeet {
     );
   }
 
-  Widget makeUpvote(upvoteCount)  {
-    bool flagPressed, upvotePressed = false;
-    return StatefulBuilder(
-      builder: (BuildContext context, StateSetter setState) { 
+  Widget makeUpvote(BuildContext context, upvotes, yeetId)  {
+    final user = Provider.of<User>(context);
+
+    // Listen for stream of upvoteData to determine if user
+    // has already upvoted/ lagged the yeet
+    
+    return StreamBuilder<UpvoteFlagData> (
+      stream: DatabaseService().getUpvoteData(user.uid, yeetId),
+      builder: (context, upvoteFlagData) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            IconButton(
+            upvoteFlagData.hasData ? IconButton(
               icon: Icon(CustomIcons.up_open, size: 25,),
-              color: (upvotePressed == true) ? Color(0xFF21BFBD) : Colors.grey[600],
+              color: (upvoteFlagData.data.upvoted == true) ? Color(0xFF21BFBD) : Colors.grey[600],
               onPressed: () {
-                setState(() {
-                  if (upvotePressed) {
-                    upvotePressed = false;
-                  } else {
-                    upvotePressed = true;
-                  }
-                });                    
+                if (upvoteFlagData.data.upvoted == true) {
+                  print(user.uid);
+                  DatabaseService().unUpvoteYeet(user.uid, yeetId); // Un-upvote
+                } else {
+                  print(user.uid);
+                  DatabaseService().upvoteYeet(user.uid, yeetId); // Upvote
+                }                
               }
-            ),
-            Text(upvoteCount.toString(), style: TextStyle(fontSize: 20, color: Colors.grey[800],)),
+            ) : LoadingIcon(30),
+            Text(upvotes.toString(), style: TextStyle(fontSize: 20, color: Colors.grey[800],)),
             SizedBox(height: 2.0),
-            IconButton(
+            upvoteFlagData.hasData ? IconButton(
               icon: Icon(Icons.flag, size: 30,),
-              color: (flagPressed == true) ? Colors.red : Colors.grey[600],
+              color: (upvoteFlagData.data.flagged == true) ? Colors.red : Colors.grey[600],
               onPressed: () {
-                setState(() {
-                  if (flagPressed == true) {
-                    flagPressed = false;
-                  } else {
-                    flagPressed = true;
-                  }
-                });                    
+                if (upvoteFlagData.data.flagged == true) {
+                  print('unflagged');
+                  DatabaseService().unFlagYeet(user.uid, yeetId); // Un-flag
+                } else {
+                  print('flagged');
+                  DatabaseService().flagYeet(user.uid, yeetId); // Flag
+                }                 
               }
-            ),
+            ) : LoadingIcon(30)
           ],
         );
       }
     );
+    
   }
   
 }

@@ -53,7 +53,7 @@ class AuthService {
     }
   }
 
-  // sign in anonymously
+  // sign out anonymously
   Future signOut() async {
     try {
       return await _auth.signOut();

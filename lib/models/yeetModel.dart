@@ -4,10 +4,10 @@ class YeetModel {
   final String author;
   final String text;
   final Timestamp time;
-  final int upvoteCount;
-  final int flagCount;
+  final int upvotes;
+  final int flags;
   final String yeetId;
   final String location;
 
-  YeetModel({this.author, this.text, this.time, this.upvoteCount, this.flagCount, this.yeetId, this.location});  
+  YeetModel({this.author, this.text, this.time, this.upvotes, this.flags, this.yeetId, this.location});  
 }

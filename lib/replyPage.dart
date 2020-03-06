@@ -27,7 +27,7 @@ class ReplyPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 40, right: 40),
                     child: Column(
                       children: <Widget>[
-                        Yeet().buildReplyYeet(context, yeetId),
+                        Yeet().buildReplyYeet(yeetId),
                         SizedBox(height: 15,)
                       ],
                     ),

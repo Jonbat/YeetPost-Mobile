@@ -1,6 +1,6 @@
 import 'package:yeetpost/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:yeetpost/loading.dart';
+import 'package:yeetpost/loadingPage.dart';
 import 'register.dart';
 
 class SignIn extends StatefulWidget {
@@ -20,7 +20,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold(
+    return loading ? LoadingPage() : Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF21BFBD),
         elevation: 0,

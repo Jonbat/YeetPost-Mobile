@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yeetpost/services/auth.dart';
-import 'package:yeetpost/loading.dart';
+import 'package:yeetpost/loadingPage.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() :Scaffold(
+    return loading ? LoadingPage() :Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFF21BFBD),
         elevation: 0,
