@@ -1,9 +1,8 @@
-import 'yeetPage.dart';
+import 'locationYeetPage.dart';
 import 'package:flutter/material.dart';
 import 'services/database.dart';
 
 class Location extends StatelessWidget {
-  //List<String> locations = ["SAU", "Duck", "Banana", "ChickenDuck", "Cow", "Frog", "Fish", "dog" , "dog", "dog", "dog", "dog"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +51,6 @@ Widget buildLocations(context) {
         itemBuilder: (context, index) {
           return buildLocationTile(
             context, locationsList.data[index]
-            //locations[index] //locationsList.data[index]
           );
         }
       );
@@ -65,9 +63,8 @@ Widget buildLocationTile(context, String locationName) {
     onTap: () { 
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => YeetPage(locationName))
+        MaterialPageRoute(builder: (context) => LocationYeetPage(locationName))
       );
-      print(locationName);
     },
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

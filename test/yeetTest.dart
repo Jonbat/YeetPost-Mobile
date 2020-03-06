@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yeetpost/locationYeets.dart';
+import 'package:yeetpost/yeet.dart';
 
 int upvoteCount = 3;
 int flagCount = 2;

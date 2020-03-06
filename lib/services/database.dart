@@ -21,7 +21,6 @@ class DatabaseService {
     return locationCollection.snapshots()
       .map(_locationListFromSnapshot);
   }
-
   List<String> _locationListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return doc.documentID.toString();
@@ -33,8 +32,26 @@ class DatabaseService {
     yeetCollection.where('location', isEqualTo: location).snapshots()
       .map(_locationYeetsFromSnapshot);
   }
-
   List<YeetModel> _locationYeetsFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return YeetModel(
+        author: doc.data['author'],
+        location: doc.data['location'],
+        text: doc.data['text'],
+        time: doc.data['time'],
+        upvoteCount: doc.data['upvoteCount'],
+        flagCount: doc.data['flagCount'],
+        yeetId: doc.documentID,
+      );
+    }).toList();
+  }
+
+  Stream<List<YeetModel>> getTrendingYeets() {
+    return 
+    yeetCollection.orderBy('upvoteCount', descending: true).limit(5).snapshots()
+      .map(_getTrendingYeets);
+  }
+  List<YeetModel> _getTrendingYeets(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return YeetModel(
         author: doc.data['author'],
@@ -66,7 +83,6 @@ class DatabaseService {
     yeetCollection.document(yeetId).collection('replies').snapshots()
       .map(_repliesFromSnapshot);
   }
-
   List<YeetModel> _repliesFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return YeetModel(           // replies use the same model as

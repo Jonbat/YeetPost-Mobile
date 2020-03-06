@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yeetpost/locationYeetPage.dart';
 import 'services/database.dart';
 
 String profileName = "Profile name";
@@ -104,20 +105,11 @@ class WriteYeetState extends State<WriteYeet> {
             ),
             onPressed: () async {
               if (_formkey.currentState.validate()) {
-                setState(() {
-                  loading = true;
-                });
-                DatabaseService().writeYeet("Southern Adventist University", "test author", yeetText);
-                
-                // dynamic result =  DatabaseService().writeYeet(location, author, yeetText);//_auth.signInWithEmailAndPassword(email, password);
-                /*
-                if (result == null) {
-                  setState(() {
-                    error = 'Could not yeet';
-                    loading = false;
-                  });
-                }
-                */
+                DatabaseService().writeYeet(dropdownValue, "test author", yeetText);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LocationYeetPage(dropdownValue))
+                );
               }
             },
           ),
@@ -148,7 +140,7 @@ class WriteYeetState extends State<WriteYeet> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Create Yeet',
+                  'Write Yeet',
                   style: TextStyle(
                     color: Colors.grey[800],
                     fontFamily: 'Montserrat',

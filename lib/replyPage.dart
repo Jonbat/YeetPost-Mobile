@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yeetpost/replyYeet.dart';
+import 'yeet.dart';
 import 'reply.dart';
 
 class ReplyPage extends StatelessWidget {
 
-  String location, yeetId;
-  ReplyPage(location, yeetId);
+  final String yeetId;
+  ReplyPage(this.yeetId);
 
  @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ReplyPage extends StatelessWidget {
                     padding: EdgeInsets.only(left: 40, right: 40),
                     child: Column(
                       children: <Widget>[
-                        ReplyYeet(location, yeetId),
+                        Yeet().buildReplyYeet(context, yeetId),
                         SizedBox(height: 15,)
                       ],
                     ),
