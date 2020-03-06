@@ -5,9 +5,14 @@ class AuthService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // create user obj based on FirebaseUser
-  User _userFromFireBaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+  // change display name
+  void changeDisplayName(String name) {
+    var user = _auth.currentUser();
+    user.then((currentUser) {
+      UserUpdateInfo updateUser = UserUpdateInfo();
+      updateUser.displayName = name;
+      currentUser.updateProfile(updateUser);
+    });
   }
 
   // auth change user stream
@@ -15,6 +20,16 @@ class AuthService {
     return _auth.onAuthStateChanged
       //.map((FirebaseUser user) => _userFromFireBaseUser(user));
       .map(_userFromFireBaseUser);
+  }
+  User _userFromFireBaseUser(FirebaseUser user) {
+    if (user != null) {
+      return User(
+        user.uid,
+        user.displayName ?? 'Anonymous'
+      );
+    } else {
+      return null;
+    }
   }
 
   // sign in anonymously
