@@ -1,22 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:yeetpost/models/yeetModel.dart';
+import 'package:yeetpost/services/database.dart';
 import 'custom_icons.dart';
+import 'loadingIcon.dart';
+import 'models/upvoteFlagData.dart';
+import 'models/user.dart';
 
 class Reply extends StatelessWidget {
-  final String replyText;
-  Reply([this.replyText]);
+  final YeetModel replyData;
+  Reply(this.replyData);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [        
-        makeText(replyText),
-        makeUpvotes()
+        makeText(),
+        makeUpvotes(context)
       ],
     );
   }
 
-  Widget makeText(replyText) {
+  Widget makeText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
@@ -24,7 +31,7 @@ class Reply extends StatelessWidget {
         Container(
           width: 275,
           child: Text(
-            replyText,
+            replyData.text,
             overflow: TextOverflow.ellipsis,
             maxLines: 5,
             style: TextStyle(
@@ -34,44 +41,54 @@ class Reply extends StatelessWidget {
             )
           ),
         ),
-        SizedBox(height: 30.0, width: 0.0),
-        Text("50m", style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
+        SizedBox(height: 30,),
+        Text(DatabaseService().formatTime(Timestamp.now().seconds - replyData.time.seconds), 
+          style: TextStyle(fontSize: 16, color: Colors.grey[500]),
+        ),
       ]
     );
   }
 
-  Widget makeUpvotes() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        IconButton(
-          icon: Icon(CustomIcons.up_open, size: 25,),
-          color: Colors.grey[600],
-          onPressed: () {}
-        ),
-        Text("3", style: TextStyle(fontSize: 20, color: Colors.grey[800],)),
-        SizedBox(height: 2.0),
-        IconButton(
-          icon: Icon(Icons.flag, size: 30,),
-          color: Colors.grey[600],
-          onPressed: () {}
-        ),
-      ],
-    );
-  }
-
-  Widget buildReplies(List<String> replies) {
-    return ListView.separated(
-      physics: ScrollPhysics(),
-      padding: EdgeInsets.only(left: 40, right: 40),
-      shrinkWrap: true,
-      itemCount: replies.length,
-      separatorBuilder: (context, index) {
-        return Divider();
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return Reply(replies[index]);
+  Widget makeUpvotes(context)  {
+    final user = Provider.of<User>(context);
+    return StreamBuilder<UpvoteFlagData> (
+      stream: DatabaseService().getReplyUpvoteData(user.uid, replyData.yeetId, replyData.replyId),
+      builder: (context, upvoteFlagData) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            upvoteFlagData.hasData ? IconButton(
+              icon: Icon(CustomIcons.up_open, size: 25,),
+              color: (upvoteFlagData.data.upvoted == true) ? Color(0xFF21BFBD) : Colors.grey[600],
+              onPressed: () {
+                if (upvoteFlagData.data.upvoted == true) {
+                  print(user.uid);
+                  DatabaseService().unUpvoteReply(user.uid, replyData.yeetId, replyData.replyId); // Un-upvote
+                } else {
+                  print(user.uid);
+                  DatabaseService().upvoteReply(user.uid, replyData.yeetId, replyData.replyId); // Upvote
+                }                
+              }
+            ) : LoadingIcon(30),
+            Text(replyData.upvotes.toString(), style: TextStyle(fontSize: 20, color: Colors.grey[800],)),
+            SizedBox(height: 2.0),
+            upvoteFlagData.hasData ? IconButton(
+              icon: Icon(Icons.flag, size: 30,),
+              color: (upvoteFlagData.data.flagged == true) ? Colors.red : Colors.grey[600],
+              onPressed: () {
+                if (upvoteFlagData.data.flagged == true) {
+                  print('unflagged');
+                  DatabaseService().unFlagReply(user.uid, replyData.yeetId, replyData.replyId); // Un-flag
+                } else {
+                  print('flagged');
+                  DatabaseService().flagReply(user.uid, replyData.yeetId, replyData.replyId); // Flag
+                }                 
+              }
+            ) : LoadingIcon(30)
+          ],
+        );
       }
     );
   }
+
 }

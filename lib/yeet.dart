@@ -120,7 +120,7 @@ class Yeet {
               onPressed: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ReplyPage(yeetData.yeetId))
+                  MaterialPageRoute(builder: (context) => ReplyPage(location, yeetData.yeetId, yeetData.author,))
                 );
               }
             ),
@@ -144,7 +144,7 @@ class Yeet {
     // has already upvoted/ lagged the yeet
     
     return StreamBuilder<UpvoteFlagData> (
-      stream: DatabaseService().getUpvoteData(user.uid, yeetId),
+      stream: DatabaseService().getYeetUpvoteData(user.uid, yeetId),
       builder: (context, upvoteFlagData) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -181,7 +181,6 @@ class Yeet {
         );
       }
     );
-    
   }
   
 }

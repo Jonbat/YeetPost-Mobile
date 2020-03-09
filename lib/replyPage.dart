@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:yeetpost/services/database.dart';
+import 'models/yeetModel.dart';
 import 'yeet.dart';
 import 'reply.dart';
 
 class ReplyPage extends StatelessWidget {
 
-  final String yeetId;
-  ReplyPage(this.yeetId);
+  final String location, yeetId, author;
+  ReplyPage(this.location, this.yeetId, this.author,);
+
+  final _formkey = GlobalKey<FormState>();
 
  @override
   Widget build(BuildContext context) {
@@ -20,7 +24,7 @@ class ReplyPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Container(
-              height: MediaQuery.of(context).size.height - 140.0,
+              height: MediaQuery.of(context).size.height - 135.0,
               child: ListView(
                 children: [
                   Padding(
@@ -28,54 +32,87 @@ class ReplyPage extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Yeet().buildReplyYeet(yeetId),
-                        SizedBox(height: 15,)
+                        SizedBox(height: 15,),
+                        Divider(),
+                        SizedBox(height: 5,),
                       ],
                     ),
                   ),
-                  Reply().buildReplies(replyList),
+                  buildReplies(),
                 ],
               ),
             ),
-            //Divider(),
-            SizedBox(height : 5,),
             replyComposer(),
           ],
         )
       )
     );
   }
-}
 
-Widget replyComposer() {
-  return Container(
-    padding: EdgeInsets.only(left: 10, right: 10,),
-    height: 50,
-    child: Row(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              labelText: "Reply...",
-            ),
-            keyboardType: TextInputType.text,
-            style: TextStyle(
-              fontFamily: "Poppins",
-            ),
+  Widget replyComposer() {
+    String replyText;
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return Form(
+          key: _formkey,
+          child: Container(
+            padding: EdgeInsets.only(left: 10, right: 10,),
+            height: 50,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextFormField(
+                    textCapitalization: TextCapitalization.sentences,
+                    maxLength: 150,
+                    decoration: InputDecoration(
+                      labelText: "Reply",
+                      counterText: "",
+                    ),
+                    validator: (val) => val.isEmpty ? 'Enter a reply' : null,
+                    onChanged: (val) {
+                      setState(() => replyText = val);
+                    }
+                  ),
+                ),
+                SizedBox(width: 5),
+                IconButton(
+                  icon: Icon(Icons.send, size: 28),
+                  color: Color(0xFF21BFBD),
+                  onPressed: () async {
+                    if (_formkey.currentState.validate()) {
+                      DatabaseService().writeReply(yeetId, author, replyText);
+                    }
+                  },
+                )
+              ],
+            )
           ),
-        ),
-        SizedBox(width: 5),
-        IconButton(
-          icon: Icon(Icons.send, size: 28),
-          color: Color(0xFF21BFBD),
-          onPressed: () {
-          }
-        )
-      ],
-    )
-  );
-}
+        );
+      }
+    );
+  }
 
-List<String> replyList = ["First reply", "A second reply", "Now this is a third reply", "Fourth", ];
+  Widget buildReplies() {
+    return StreamBuilder<List<YeetModel>> (
+      stream: DatabaseService().getReplies(yeetId),
+      builder: (context, replies) {
+        return ListView.separated(
+          physics: ScrollPhysics(),
+          padding: EdgeInsets.only(left: 40, right: 40),
+          shrinkWrap: true,
+          itemCount: replies.hasData ? replies.data.length : 0,
+          separatorBuilder: (context, index) {
+            return Divider();
+          },
+          itemBuilder: (BuildContext context, int index) {
+            return Reply(replies.data[index]);
+          }
+        );
+      }
+    );
+  }
+  
+}
   
 
 

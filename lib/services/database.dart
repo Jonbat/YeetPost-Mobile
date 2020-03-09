@@ -8,6 +8,8 @@ class DatabaseService {
   final CollectionReference locationCollection = Firestore.instance.collection('locations');
   final CollectionReference userCollection = Firestore.instance.collection('users');
 
+  // setters
+
   void writeYeet(String location, String author, String yeetText) {
     yeetCollection.document().setData({
       'author' : author,
@@ -18,6 +20,68 @@ class DatabaseService {
       'flags' : 0,
     });
   }
+
+  void writeReply(String yeetId, String author, String replyText) {
+    yeetCollection.document(yeetId).collection('replies').document().setData({
+      'author' : author,
+      'text' : replyText,
+      'time' : Timestamp.now(),
+      'upvotes' : 0,
+      'flags' : 0,
+    });
+  }
+
+  void upvoteYeet(String userId, String yeetId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
+      'upvoted' : true,
+    });
+    yeetCollection.document(yeetId).updateData({'upvotes' : FieldValue.increment(1)});
+  }
+  void unUpvoteYeet(String userId, String yeetId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
+      'upvoted' : false,
+    });
+    yeetCollection.document(yeetId).updateData({'upvotes' : FieldValue.increment(-1)});
+  }
+  void flagYeet(String userId, String yeetId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
+      'flagged' : true,
+    });
+    yeetCollection.document(yeetId).updateData({'flags' : FieldValue.increment(1)});
+  }
+  void unFlagYeet(String userId, String yeetId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
+      'flagged' : false,
+    });
+    yeetCollection.document(yeetId).updateData({'flags' : FieldValue.increment(-1)});
+  }
+
+  void upvoteReply(String userId, String yeetId, String replyId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(replyId).setData({
+      'upvoted' : true,
+    });
+    yeetCollection.document(yeetId).collection('replies').document(replyId).updateData({'upvotes' : FieldValue.increment(1)});
+  }
+  void unUpvoteReply(String userId, String yeetId, String replyId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(replyId).setData({
+      'upvoted' : false,
+    });
+    yeetCollection.document(yeetId).collection('replies').document(replyId).updateData({'upvotes' : FieldValue.increment(-1)});
+  }
+  void flagReply(String userId, String yeetId, String replyId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(replyId).setData({
+      'flagged' : true,
+    });
+    yeetCollection.document(yeetId).collection('replies').document(replyId).updateData({'flags' : FieldValue.increment(1)});
+  }
+  void unFlagReply(String userId, String yeetId, String replyId) {
+    userCollection.document(userId).collection('upvoteFlagData').document(replyId).setData({
+      'flagged' : false,
+    });
+    yeetCollection.document(yeetId).collection('replies').document(replyId).updateData({'flags' : FieldValue.increment(-1)});
+  }
+
+  // getters
 
   Stream<String> getUserName(String userId) {
     return userCollection.document(userId).snapshots().map((doc) {
@@ -37,14 +101,9 @@ class DatabaseService {
     }).asStream();
   }
 
-  Stream<UpvoteFlagData> getUpvoteData(String userId, String yeetId) {
+  Stream<UpvoteFlagData> getYeetUpvoteData(String userId, String yeetId) {
     // User:
-      // upvotes: all ids of yeets that have been upvoted
-      // flags: all ids of yeets that have been flagged
-
-      // ... or ...
-
-      // upvoteFlagData: upvoteFlagData (chosen)
+      // upvoteFlagData:
         // - upvoted: true/false
         // - flagged: true/false
     return
@@ -61,33 +120,23 @@ class DatabaseService {
         );
       }
     });
-    
   }
 
-  void upvoteYeet(String userId, String yeetId) {
-    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
-      'upvoted' : true,
+  Stream<UpvoteFlagData> getReplyUpvoteData(String userId, String yeetId, String replyId) {
+    return
+    userCollection.document(userId).collection('upvoteFlagData').document(replyId).snapshots().map((doc) {
+      if (doc.data == null) {
+        return UpvoteFlagData(
+          upvoted: false,
+          flagged: false,
+        );
+      } else {
+        return UpvoteFlagData(
+          upvoted: doc.data['upvoted'] ?? false,
+          flagged: doc.data['flagged'] ?? false,
+        );
+      }
     });
-    yeetCollection.document(yeetId).updateData({'upvotes' : FieldValue.increment(1)});
-  }
-  void unUpvoteYeet(String userId, String yeetId) {
-    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
-      'upvoted' : false,
-    });
-    yeetCollection.document(yeetId).updateData({'upvotes' : FieldValue.increment(-1)});
-  }
-
-  void flagYeet(String userId, String yeetId) {
-    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
-      'flagged' : true,
-    });
-    yeetCollection.document(yeetId).updateData({'flags' : FieldValue.increment(1)});
-  }
-  void unFlagYeet(String userId, String yeetId) {
-    userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
-      'flagged' : false,
-    });
-    yeetCollection.document(yeetId).updateData({'flags' : FieldValue.increment(-1)});
   }
 
   Stream<List<String>> get locations {
@@ -155,9 +204,11 @@ class DatabaseService {
   Stream<List<YeetModel>> getReplies(String yeetId) {
     return 
     yeetCollection.document(yeetId).collection('replies').snapshots()
-      .map(_repliesFromSnapshot);
+      .map((doc) {
+        return _repliesFromSnapshot(doc, yeetId);
+      });
   }
-  List<YeetModel> _repliesFromSnapshot(QuerySnapshot snapshot) {
+  List<YeetModel> _repliesFromSnapshot(QuerySnapshot snapshot, String yeetId) {
     return snapshot.documents.map((doc) {
       return YeetModel(           // replies use the same model as
         author: doc.data['author'],
@@ -165,6 +216,8 @@ class DatabaseService {
         time: doc.data['time'],
         upvotes: doc.data['upvotes'],
         flags: doc.data['flags'],
+        yeetId: yeetId,
+        replyId: doc.documentID,
       );
     }).toList();
   }
