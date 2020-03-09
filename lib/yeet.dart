@@ -11,13 +11,11 @@ import 'package:flutter/material.dart';
 import 'loadingIcon.dart';
 
 class Yeet {
-  String location;
-  Yeet([this.location]);
-
-  Widget buildLocationYeets(yeetData) {
+  Widget buildLocationYeets(String location) {
     return StreamBuilder<List<YeetModel>> (
       stream: DatabaseService().getLocationYeets(location),
       builder: (context, yeetData) {
+        print(location);
         return ListView.separated(
           physics: ScrollPhysics(),
           padding: EdgeInsets.only(left: 40, right: 40),
@@ -30,7 +28,7 @@ class Yeet {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [        
-                createText(context, yeetData.data[index]),
+                createText(context, yeetData.data[index],),
                 makeUpvote(context, yeetData.data[index].upvotes, yeetData.data[index].yeetId,)
               ],
             );
@@ -120,7 +118,7 @@ class Yeet {
               onPressed: () {
                 Navigator.push(
                   context, 
-                  MaterialPageRoute(builder: (context) => ReplyPage(location, yeetData.yeetId, yeetData.author,))
+                  MaterialPageRoute(builder: (context) => ReplyPage(yeetData.location, yeetData.yeetId, yeetData.author,))
                 );
               }
             ),

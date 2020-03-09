@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yeetpost/yeet.dart';
 
 class LocationYeetPage extends StatelessWidget {
-  final location;
+  final String location;
   // Receive the selected verse from the verse selection
   LocationYeetPage(this.location);
 

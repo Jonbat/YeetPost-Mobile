@@ -18,7 +18,7 @@ class Reply extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [        
         makeText(),
-        makeUpvotes(context)
+        makeUpvote(context)
       ],
     );
   }
@@ -49,7 +49,7 @@ class Reply extends StatelessWidget {
     );
   }
 
-  Widget makeUpvotes(context)  {
+  Widget makeUpvote(context)  {
     final user = Provider.of<User>(context);
     return StreamBuilder<UpvoteFlagData> (
       stream: DatabaseService().getReplyUpvoteData(user.uid, replyData.yeetId, replyData.replyId),
