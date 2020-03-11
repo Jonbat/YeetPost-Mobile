@@ -48,6 +48,20 @@ class DatabaseService {
       'flagged' : true,
     });
     yeetCollection.document(yeetId).updateData({'flags' : FieldValue.increment(1)});
+    // If a yeet has over three flags, create it in the 'underReview' section
+    //  - It can be searched for using it's ID from the Firebase Console
+    getSingleYeet(yeetId).listen((yeet) {
+      if (yeet.flags > 3) {
+        Firestore.instance.collection('underReview').document(yeetId).setData({
+          'author' : yeet.author,
+          'text' : yeet.text,
+          'time' : yeet.time,
+          'upvotes' : yeet.upvotes,
+          'flags' : yeet.flags,
+          'yeetId': yeet.yeetId,
+        });
+      }
+    });
   }
   void unFlagYeet(String userId, String yeetId) {
     userCollection.document(userId).collection('upvoteFlagData').document(yeetId).setData({
@@ -73,6 +87,19 @@ class DatabaseService {
       'flagged' : true,
     });
     yeetCollection.document(yeetId).collection('replies').document(replyId).updateData({'flags' : FieldValue.increment(1)});
+    getSingleReply(yeetId, replyId).listen((reply) {
+      if (reply.flags > 3) {
+        Firestore.instance.collection('underReview').document(replyId).setData({
+          'author' : reply.author,
+          'text' : reply.text,
+          'time' : reply.time,
+          'upvotes' : reply.upvotes,
+          'flags' : reply.flags,
+          'yeetId': reply.yeetId,
+          'replyId': reply.replyId,
+        });
+      }
+    });
   }
   void unFlagReply(String userId, String yeetId, String replyId) {
     userCollection.document(userId).collection('upvoteFlagData').document(replyId).setData({
@@ -197,6 +224,21 @@ class DatabaseService {
         upvotes: doc.data['upvotes'],
         flags: doc.data['flags'],
         yeetId: doc.documentID,
+      );
+    });
+  }
+
+  Stream<YeetModel> getSingleReply(String yeetId, String replyId) { 
+    return yeetCollection.document(yeetId).collection('replies').document(replyId).snapshots().map((doc) {
+      return YeetModel(
+        author: doc['author'],
+        location: doc.data['location'],
+        text: doc.data['text'],
+        time: doc.data['time'],
+        upvotes: doc.data['upvotes'],
+        flags: doc.data['flags'],
+        yeetId: yeetId,
+        replyId: doc.documentID,
       );
     });
   }

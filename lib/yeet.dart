@@ -15,7 +15,6 @@ class Yeet {
     return StreamBuilder<List<YeetModel>> (
       stream: DatabaseService().getLocationYeets(location),
       builder: (context, yeetData) {
-        print(location);
         return ListView.separated(
           physics: ScrollPhysics(),
           padding: EdgeInsets.only(left: 40, right: 40),

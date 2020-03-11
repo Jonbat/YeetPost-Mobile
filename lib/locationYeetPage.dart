@@ -3,7 +3,6 @@ import 'package:yeetpost/yeet.dart';
 
 class LocationYeetPage extends StatelessWidget {
   final String location;
-  // Receive the selected verse from the verse selection
   LocationYeetPage(this.location);
 
  @override
@@ -15,7 +14,6 @@ class LocationYeetPage extends StatelessWidget {
           backgroundColor: Color(0xFF21BFBD),
       ),
       backgroundColor: Colors.white,
-      // build yeets, based on location
       body: Yeet().buildLocationYeets(location)
     );
   }
