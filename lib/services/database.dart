@@ -265,6 +265,9 @@ class DatabaseService {
   }
 
   String formatTime(num totalseconds) {
+    if (totalseconds > 86400) {
+      return (totalseconds ~/ 86400).toString() + 'd';
+    }
     if (totalseconds > 3600) {
       return (totalseconds ~/ 3600).toString() + 'h';
     } else if (totalseconds > 60) {

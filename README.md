@@ -1,3 +1,7 @@
+<p align="center">
+ <img src="yeetPostThumb.jpg" width="100%">
+</p>
+
 # YeetPost-Mobile
 A cross-platform, mobile mobile messaging application!
 
