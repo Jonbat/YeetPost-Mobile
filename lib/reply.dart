@@ -27,7 +27,9 @@ class Reply extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children:[
-        SizedBox(height: 30.0, width: 0.0),
+        SizedBox(height: 10.0),
+        Text(replyData.author, style: TextStyle(fontSize: 16, color: Colors.grey[500]),),
+        SizedBox(height: 10.0, width: 0.0),
         Container(
           width: 275,
           child: Text(

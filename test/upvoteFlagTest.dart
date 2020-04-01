@@ -5,16 +5,21 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yeetpost/location.dart';
+import 'package:yeetpost/yeet.dart';
 
 void main() {
-  testWidgets('Location renders correctly', (WidgetTester tester) async {
+  testWidgets('Upvote and flag values should be incremented when upvote is tapped', (WidgetTester tester) async {
     await tester.pumpWidget(
-      Location()
+      Yeet().buildReplyYeet(1)
     );
 
-    expect(find.text('locations'), findsOneWidget);
+    await tester.tap(find.byType(IconButton,));
+
+    // Rebuild the widget with updated data
+    await tester.pump();
+
+    expect(find.text('1'), findsOneWidget);
   });
-  
 }

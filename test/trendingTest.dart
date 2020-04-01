@@ -6,15 +6,14 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:yeetpost/location.dart';
+import 'package:yeetpost/trending.dart';
 
 void main() {
-  testWidgets('Location renders correctly', (WidgetTester tester) async {
+  testWidgets('Trending Test', (WidgetTester tester) async {
     await tester.pumpWidget(
-      Location()
+      Trending()
     );
 
-    expect(find.text('locations'), findsOneWidget);
+    expect(find.text('Trending'), findsOneWidget);
   });
-  
 }

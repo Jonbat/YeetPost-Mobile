@@ -20,37 +20,43 @@ class ReplyPage extends StatelessWidget {
           backgroundColor: Color(0xFF21BFBD),
       ),
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height - 135.0,
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(left: 40, right: 40),
-                    child: Column(
-                      children: <Widget>[
-                        Yeet().buildReplyYeet(yeetId),
-                        SizedBox(height: 15,),
-                        Divider(),
-                        SizedBox(height: 5,),
-                      ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: MediaQuery.of(context).size.height - 135.0,
+                child: ListView(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 40, right: 40),
+                      child: Column(
+                        children: <Widget>[
+                          Yeet().buildReplyYeet(yeetId),
+                          SizedBox(height: 15,),
+                          Divider(),
+                          SizedBox(height: 5,),
+                        ],
+                      ),
                     ),
-                  ),
-                  buildReplies(),
-                ],
+                    buildReplies(),
+                  ],
+                ),
               ),
-            ),
-            replyComposer(),
-          ],
-        )
+              replyComposer(),
+            ],
+          )
+        ),
       )
     );
   }
 
   Widget replyComposer() {
     String replyText;
+    final TextEditingController _controller = new TextEditingController();
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Form(
@@ -62,13 +68,14 @@ class ReplyPage extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: TextFormField(
+                    controller: _controller,
                     textCapitalization: TextCapitalization.sentences,
                     maxLength: 150,
                     decoration: InputDecoration(
                       labelText: "Reply",
                       counterText: "",
                     ),
-                    validator: (val) => val.isEmpty ? 'Enter a reply' : null,
+                    validator: (val) => val.isEmpty ? 'Please enter a reply' : null,
                     onChanged: (val) {
                       setState(() => replyText = val);
                     }
@@ -81,6 +88,8 @@ class ReplyPage extends StatelessWidget {
                   onPressed: () async {
                     if (_formkey.currentState.validate()) {
                       DatabaseService().writeReply(yeetId, author, replyText);
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      _controller.clear();
                     }
                   },
                 )
