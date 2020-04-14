@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yeetpost/locationYeetPage.dart';
+import 'mlTest.dart';
 import 'services/database.dart';
 
 String profileName = "Profile name";
@@ -151,7 +152,25 @@ class WriteYeetState extends State<WriteYeet> {
                 SizedBox(height: 30.0,),
                 buildDropdown(context),
                 SizedBox(height: 35.0,),
-                yeetInputField()
+                yeetInputField(),
+                RaisedButton(
+                  textColor: Colors.white,
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('ML Test', style: TextStyle(fontSize: 24.0)),
+                      ],
+                    ),
+                  ),
+                  onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MlTest())
+                      );
+                  },
+                ),
               ]
             ),
           ),
