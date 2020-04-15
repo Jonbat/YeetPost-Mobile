@@ -160,7 +160,7 @@ class WriteYeetState extends State<WriteYeet> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text('ML Test', style: TextStyle(fontSize: 24.0)),
+                        Text('Machine Learning Test', style: TextStyle(fontSize: 24.0)),
                       ],
                     ),
                   ),

@@ -22,15 +22,15 @@ class Tokenize {
     Map<String, dynamic> data = await rootBundle
         .loadString(path)
         .then((value) => jsonDecode(value)); // load json data and decode value
-    var each_word = input.split(" "); // take each word from user input string
+    var eachWord = input.split(" "); // take each word from user input string
     var wordtovec = [];
     List<int> bagofwords = new List(count);
 
-    for (var e in each_word) {
+    for (var e in eachWord) {
       if (data[e] != null) wordtovec.add(data[e]);
     }
 
-   print("each_word $each_word");
+   print("eachWord $eachWord");
    print("wo2vec ${wordtovec[0]}");
     // if elements of wordtovec is in json file add a '1' at that  position else '0'
     for (var i = 0; i < count; i++) {
