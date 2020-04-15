@@ -12,7 +12,7 @@ import 'package:yeetpost/replyPage.dart';
 void main() {
   testWidgets('UI test for writing a yeet', (WidgetTester tester) async {
     await tester.pumpWidget(
-      ReplyPage()
+      ReplyPage('test', 'test', 'test',)
     );
 
     // Enter 'Test yeet text' into the TextField.

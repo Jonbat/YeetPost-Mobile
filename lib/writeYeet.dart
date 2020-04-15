@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yeetpost/locationYeetPage.dart';
-import 'mlTest.dart';
+import 'package:yeetpost/machineLearning.dart';
 import 'services/database.dart';
 
 String profileName = "Profile name";
@@ -167,7 +167,7 @@ class WriteYeetState extends State<WriteYeet> {
                   onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MlTest())
+                        MaterialPageRoute(builder: (context) => MachineLearning())
                       );
                   },
                 ),
