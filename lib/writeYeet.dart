@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yeetpost/locationYeetPage.dart';
 import 'package:yeetpost/machineLearning.dart';
+import 'classifyText.dart';
 import 'services/database.dart';
 
 String profileName = "Profile name";
@@ -88,7 +89,7 @@ class WriteYeetState extends State<WriteYeet> {
               labelText: "Yeet text...",
             ),
             validator: (val) => val.isEmpty ? 'Enter a yeet' : null,
-            onChanged: (val){
+            onChanged: (val) {
               setState(() => yeetText = val);
             }
           ),
@@ -106,11 +107,20 @@ class WriteYeetState extends State<WriteYeet> {
             ),
             onPressed: () async {
               if (_formkey.currentState.validate()) {
-                DatabaseService().writeYeet(dropdownValue, "test author", yeetText);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LocationYeetPage(dropdownValue))
-                );
+                ClassifyText.classify(yeetText).then((result) {
+                  if (result == "1") {
+                    print("offensive");
+                    ClassifyText.cyberbullyAlert(context).then((alert){
+                      return alert;
+                    });
+                  } else {
+                    DatabaseService().writeYeet(dropdownValue, "test author", yeetText);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LocationYeetPage(dropdownValue))
+                    );
+                  }
+                });
               }
             },
           ),
@@ -118,7 +128,8 @@ class WriteYeetState extends State<WriteYeet> {
           Text(
             error,
             style: TextStyle(color: Colors.red),
-          )
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );
@@ -126,56 +137,61 @@ class WriteYeetState extends State<WriteYeet> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF21BFBD),
-      body: Container(
-        height: MediaQuery.of(context).size.height - 80.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(topRight: Radius.circular(60.0)),//75
-        ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Write Yeet',
-                  style: TextStyle(
-                    color: Colors.grey[800],
-                    fontFamily: 'Montserrat',
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold
-                  )
-                ),
-                SizedBox(height: 30.0,),
-                buildDropdown(context),
-                SizedBox(height: 35.0,),
-                yeetInputField(),
-                RaisedButton(
-                  textColor: Colors.white,
-                  child: Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text('Machine Learning Test', style: TextStyle(fontSize: 24.0)),
-                      ],
-                    ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        backgroundColor: Color(0xFF21BFBD),
+        body: Container(
+          height: MediaQuery.of(context).size.height - 80.0,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topRight: Radius.circular(60.0)),//75
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40, top: 20, right: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Write Yeet',
+                    style: TextStyle(
+                      color: Colors.grey[800],
+                      fontFamily: 'Montserrat',
+                      fontSize: 30.0,
+                      fontWeight: FontWeight.bold
+                    )
                   ),
-                  onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MachineLearning())
-                      );
-                  },
-                ),
-              ]
+                  SizedBox(height: 30.0,),
+                  buildDropdown(context),
+                  SizedBox(height: 35.0,),
+                  yeetInputField(),
+                  RaisedButton(
+                    textColor: Colors.white,
+                    child: Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('Machine Learning Test', style: TextStyle(fontSize: 24.0)),
+                        ],
+                      ),
+                    ),
+                    onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MachineLearning())
+                        );
+                    },
+                  ),
+                ]
+              ),
             ),
           ),
-        ),
-      )
+        )
+      ),
     );
   }
 

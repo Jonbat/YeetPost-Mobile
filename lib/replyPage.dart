@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yeetpost/services/database.dart';
+import 'classifyText.dart';
 import 'models/yeetModel.dart';
 import 'yeet.dart';
 import 'reply.dart';
@@ -87,9 +88,18 @@ class ReplyPage extends StatelessWidget {
                   color: Color(0xFF21BFBD),
                   onPressed: () async {
                     if (_formkey.currentState.validate()) {
-                      DatabaseService().writeReply(yeetId, author, replyText);
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      _controller.clear();
+                      ClassifyText.classify(replyText).then((result) {
+                        if (result == "1") {
+                          print("offensive");
+                          ClassifyText.cyberbullyAlert(context).then((alert){
+                            return alert;
+                          });
+                        } else {
+                          DatabaseService().writeReply(yeetId, author, replyText);
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          _controller.clear();
+                        }
+                      });
                     }
                   },
                 )

@@ -21,6 +21,7 @@ class Profile extends StatelessWidget {
             children: [
               TextFormField(
                 textCapitalization: TextCapitalization.sentences,
+                autofocus: true,
                 maxLength: 150,
                 decoration: InputDecoration(
                   labelText: "New name",
@@ -86,13 +87,13 @@ class Profile extends StatelessWidget {
               ),
               //SizedBox(height: 50.0,),
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 2, right: 40,),
+                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 5, right: 40,),
                 child: StreamBuilder<String>(
                   stream: DatabaseService().getUserName(user.uid),
                   builder: (context, returnedName) {
                     return Text(
                       returnedName.hasData ? 'Current Name : ' + returnedName.data
-                      : 'loading...',
+                      : 'Anonymous',
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontFamily: 'Montserrat',
