@@ -21,7 +21,6 @@ class Profile extends StatelessWidget {
             children: [
               TextFormField(
                 textCapitalization: TextCapitalization.sentences,
-                autofocus: true,
                 maxLength: 150,
                 decoration: InputDecoration(
                   labelText: "New name",

@@ -66,4 +66,16 @@ class AuthService {
     }
   }
 
+  void resetPassword(emailAddress) {
+    _auth.sendPasswordResetEmail(email: emailAddress);
+    /*
+    return _auth.sendPasswordResetEmail(email: emailAddress).then((value) {
+    })
+    .catchError((error) {
+      return error;
+    });
+  }
+  */
+  }
+
 }

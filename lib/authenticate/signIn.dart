@@ -2,6 +2,7 @@ import 'package:yeetpost/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:yeetpost/loadingPage.dart';
 import 'register.dart';
+import 'resetPassword.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -16,61 +17,82 @@ class _SignInState extends State<SignIn> {
 
   String email;
   String password;
+  String resetError = '';
   String error = '';
 
   @override
   Widget build(BuildContext context) {
-    return loading ? LoadingPage() : Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF21BFBD),
-        elevation: 0,
-        title: Text('Sign in to YeetPost'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            signInField(),
-            SizedBox(height: 20),
-            Text("Don\'t have an account?"),
-            SizedBox(height: 5),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return  loading ? LoadingPage() : GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(new FocusNode());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFF21BFBD),
+          elevation: 0,
+          title: Text('Sign in to YeetPost'),
+        ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                signInField(),
+                SizedBox(height: 20),
+                Text("Don\'t have an account?"),
+                SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      child: Text("Register", 
+                        style: TextStyle(color: Color(0xFF21BFBD)
+                        )
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Register())
+                        );
+                      },
+                    ),
+                    Text("  or  ",),
+                    InkWell(
+                      child: Text("Sign in anonymously", 
+                        style: TextStyle(color: Color(0xFF21BFBD)
+                        )
+                      ),
+                      onTap: () async {
+                        dynamic result = await _auth.signInAnon();
+                        if (result == null) {
+                          print('error signing in');
+                        } else {
+                          print('signed in');
+                          print(result.uid);
+                        }
+                      },
+                    ),
+                  ]
+                ),
+                SizedBox(height: 10),
                 InkWell(
-                  child: Text("Register", 
+                  child: Text("Forgot password?", 
                     style: TextStyle(color: Color(0xFF21BFBD)
                     )
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Register())
+                      MaterialPageRoute(builder: (context) => ResetPassword())
                     );
                   },
                 ),
-                Text("  or  ",),
-                InkWell(
-                  child: Text("Sign in anonymously", 
-                    style: TextStyle(color: Color(0xFF21BFBD)
-                    )
-                  ),
-                  onTap: () async {
-                    dynamic result = await _auth.signInAnon();
-                    if (result == null) {
-                      print('error signing in');
-                    } else {
-                      print('signed in');
-                      print(result.uid);
-                    }
-                  },
-                ),
-              ]
-            )
-          ],
-        ),
-      )
+              ],
+            ),
+          ),
+        )
+      ),
     );
   }
 
