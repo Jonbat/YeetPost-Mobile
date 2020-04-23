@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 class ClassifyText {
 
   static Future<String> classify (text) {
-    Tokenize ondevice = Tokenize(1000, 'assets/devive_json.json');
+    Tokenize ondevice = Tokenize(1000, 'assets/cyberbullyVocab.json');
     List<int> inp = List();
     return ondevice.getTokenized(text).then((value) {
       inp = value;

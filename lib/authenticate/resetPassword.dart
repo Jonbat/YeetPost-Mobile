@@ -22,7 +22,7 @@ class _ResetPasswordState extends State<ResetPassword> {
       appBar: AppBar(
         backgroundColor: Color(0xFF21BFBD),
         elevation: 0,
-        title: Text('Sign up for YeetPost'),
+        title: Text('Forgot Password'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, top: 20, right: 40,),

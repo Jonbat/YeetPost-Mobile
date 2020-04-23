@@ -108,7 +108,7 @@ class WriteYeetState extends State<WriteYeet> {
             onPressed: () async {
               if (_formkey.currentState.validate()) {
                 ClassifyText.classify(yeetText).then((result) {
-                  if (result == "1") {
+                  if (result == "0") {
                     print("offensive");
                     ClassifyText.cyberbullyAlert(context).then((alert){
                       return alert;

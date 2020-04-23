@@ -64,7 +64,7 @@ protected Interpreter tflite;
      float [][] output_datas= new float[1][1];
      tflite.run(intArray,output_datas);
      System.out.println(output_datas);
-     if (output_datas[0][0]>0.5)
+     if (output_datas[0][0]>0.5) // switch from > for new model
      {
       return "1";
      }
@@ -77,7 +77,7 @@ protected Interpreter tflite;
   // method to load tflite file from device 
   
   private MappedByteBuffer loadModelFile() throws Exception {
-  AssetFileDescriptor fileDescriptor = this.getAssets().openFd("newdevice.tflite");
+  AssetFileDescriptor fileDescriptor = this.getAssets().openFd("cyberbullyClassifier.tflite");
   FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
   FileChannel fileChannel = inputStream.getChannel();
   long startOffset = fileDescriptor.getStartOffset();

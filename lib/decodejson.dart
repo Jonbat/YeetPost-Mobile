@@ -16,7 +16,7 @@ class Tokenize {
   // example : Let 'like' is the most occuring word in our trainig set our json file will have 'like' with index value 1 and least occuing
   // word be 'that' with highest index number.
   // Consider a user input string like 'i like that' then corresponding matrix will be [1,0,0,1...0,0,1] , here the  first
-  // element will be '1'  because the word 'like is in user input and 'that' is least occuirng word ,here 'i' is the fourth most occuring word.
+  // element will be '1' because the word 'like is in user input and 'that' is least occuirng word ,here 'i' is the fourth most occuring word.
 
   Future<List<int>> getTokenized(String input) async {
     Map<String, dynamic> data = await rootBundle
@@ -32,7 +32,7 @@ class Tokenize {
 
    print("eachWord $eachWord");
    print("wo2vec ${wordtovec[0]}");
-    // if elements of wordtovec is in json file add a '1' at that  position else '0'
+    // if elements of wordtovec is in json file add a '1' at that position else '0'
     for (var i = 0; i < count; i++) {
       if (wordtovec.contains(i))
         bagofwords[i] = 1;

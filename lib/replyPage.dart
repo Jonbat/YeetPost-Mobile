@@ -89,7 +89,7 @@ class ReplyPage extends StatelessWidget {
                   onPressed: () async {
                     if (_formkey.currentState.validate()) {
                       ClassifyText.classify(replyText).then((result) {
-                        if (result == "1") {
+                        if (result == "0") {
                           print("offensive");
                           ClassifyText.cyberbullyAlert(context).then((alert){
                             return alert;

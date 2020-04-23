@@ -19,7 +19,7 @@ class _MachineLearningState extends State<MachineLearning> {
 
   @override
   Widget build(BuildContext context) {
-    Tokenize ondevice = Tokenize(1000, 'assets/devive_json.json');
+    Tokenize ondevice = Tokenize(1000, 'assets/cyberbullyVocab.json');
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -86,7 +86,7 @@ class _MachineLearningState extends State<MachineLearning> {
     try {
       final String result =
           await MachineLearning.platform.invokeMethod('predictData', {"arg": inp});
-      if (result == "1") {
+      if (result == "0") {
         offensiveColor = Colors.red;
       } else
         offensiveColor = Colors.green;
