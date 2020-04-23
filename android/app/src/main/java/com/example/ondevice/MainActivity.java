@@ -64,7 +64,7 @@ protected Interpreter tflite;
      float [][] output_datas= new float[1][1];
      tflite.run(intArray,output_datas);
      System.out.println(output_datas);
-     if (output_datas[0][0]>0.5) // switch from > for new model
+     if (output_datas[0][0]>0.5)
      {
       return "1";
      }
