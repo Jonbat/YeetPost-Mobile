@@ -10,3 +10,5 @@ YeetPost is a mobile cross-platform, messaging application, developed with Flutt
 
 # Built With
 * [Flutter](https://flutter.dev/)
+* [Firebase](https://firebase.google.com/)
+* [TensorFlow Lite](https://www.tensorflow.org/lite)
