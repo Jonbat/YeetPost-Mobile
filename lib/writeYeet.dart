@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:yeetpost/locationYeetPage.dart';
 import 'package:yeetpost/machineLearning.dart';
 import 'classifyText.dart';
+import 'models/user.dart';
 import 'services/database.dart';
 
 String profileName = "Profile name";
@@ -20,6 +22,7 @@ class WriteYeetState extends State<WriteYeet> {
   String yeetText;
   bool loading = false;
   String error = '';
+  String profileName = "Anonymous";
 
   Widget buildDropdown(BuildContext context) {
     return StreamBuilder<List<String>> (
@@ -78,6 +81,8 @@ class WriteYeetState extends State<WriteYeet> {
   }
 
   Widget yeetInputField() {
+    // add profile name
+    final user = Provider.of<User>(context);
     return Form(
       key: _formkey,
       child: Column(
@@ -107,14 +112,20 @@ class WriteYeetState extends State<WriteYeet> {
             ),
             onPressed: () async {
               if (_formkey.currentState.validate()) {
+                // print user.uid
+                DatabaseService().getUserName(user.uid).listen((result) {
+                  if (result != null) {
+                    profileName = result;
+                  }
+                });
                 ClassifyText.classify(yeetText).then((result) {
-                  if (result == "0") {
+                  if (result == "1") {
                     print("offensive");
                     ClassifyText.cyberbullyAlert(context).then((alert){
                       return alert;
                     });
                   } else {
-                    DatabaseService().writeYeet(dropdownValue, "test author", yeetText);
+                    DatabaseService().writeYeet(dropdownValue, profileName, yeetText);
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => LocationYeetPage(dropdownValue))

@@ -90,7 +90,7 @@ class ReplyPage extends StatelessWidget {
                     if (_formkey.currentState.validate()) {
                       ClassifyText.classify(replyText).then((result) {
                         if (result == "0") {
-                          print("offensive");
+                          //print("offensive");
                           ClassifyText.cyberbullyAlert(context).then((alert){
                             return alert;
                           });

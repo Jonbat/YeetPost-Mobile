@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'decodejson.dart';
-import 'dart:async';
+import 'classifyText.dart';
 import 'package:flutter/services.dart';
 
 class MachineLearning extends StatefulWidget {
@@ -19,7 +18,6 @@ class _MachineLearningState extends State<MachineLearning> {
 
   @override
   Widget build(BuildContext context) {
-    Tokenize ondevice = Tokenize(1000, 'assets/cyberbullyVocab.json');
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -63,13 +61,16 @@ class _MachineLearningState extends State<MachineLearning> {
                   ),
                 ),
                 onPressed: () {
-                  ondevice.getTokenized(texts.text).then((value) {
-                    inp = value;
-                    print(inp);
-                  }).then((_) {
-                    _getPredictData().then((data) {
-                      setState(() {});
-                    });
+                  ClassifyText.classify(texts.text).then((result) {
+                    if (result == "0") {
+                      setState(() {
+                        offensiveColor = Colors.red;
+                      });
+                    } else {
+                      setState(() {
+                        offensiveColor = Colors.green;
+                      });
+                    }
                   });
                 },
               ),
@@ -78,22 +79,5 @@ class _MachineLearningState extends State<MachineLearning> {
         ),
       ),
     );
-  }
-
-  // method that communicate with java code through platform specific channel
-
-  Future<void> _getPredictData() async {
-    try {
-      final String result =
-          await MachineLearning.platform.invokeMethod('predictData', {"arg": inp});
-      if (result == "0") {
-        offensiveColor = Colors.red;
-      } else
-        offensiveColor = Colors.green;
-    
-    } on PlatformException catch (e) {
-     
-      print(e.message);
-    }
   }
 }

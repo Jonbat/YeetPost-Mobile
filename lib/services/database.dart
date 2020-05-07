@@ -180,6 +180,7 @@ class DatabaseService {
     return 
     yeetCollection.where('location', isEqualTo: location).snapshots()
       .map(_locationYeetsFromSnapshot);
+      // .orderBy('time', descending: true)
   }
   List<YeetModel> _locationYeetsFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
@@ -197,7 +198,7 @@ class DatabaseService {
 
   Stream<List<YeetModel>> getTrendingYeets() {
     return 
-    yeetCollection.orderBy('upvotes', descending: true).limit(5).snapshots()
+    yeetCollection.orderBy('upvotes', descending: true).limit(10).snapshots()
       .map(_getTrendingYeets);
   }
   List<YeetModel> _getTrendingYeets(QuerySnapshot snapshot) {

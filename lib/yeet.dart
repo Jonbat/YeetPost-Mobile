@@ -136,10 +136,6 @@ class Yeet {
 
   Widget makeUpvote(BuildContext context, upvotes, yeetId)  {
     final user = Provider.of<User>(context);
-
-    // Listen for stream of upvoteData to determine if user
-    // has already upvoted/ lagged the yeet
-    
     return StreamBuilder<UpvoteFlagData> (
       stream: DatabaseService().getYeetUpvoteData(user.uid, yeetId),
       builder: (context, upvoteFlagData) {

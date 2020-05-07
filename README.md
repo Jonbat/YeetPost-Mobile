@@ -7,6 +7,7 @@ YeetPost is a mobile cross-platform, messaging application, developed with Flutt
 
 # Installation
 * [Flutter installtion guide](https://flutter.dev/docs/get-started/install)
+* [Set-up Firebase](https://firebase.google.com/docs/flutter/setup?platform=android) and add the config file (google-services.json) to android/app/
 
 # Built With
 * [Flutter](https://flutter.dev/)

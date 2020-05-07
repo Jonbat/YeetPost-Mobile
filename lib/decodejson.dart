@@ -31,7 +31,8 @@ class Tokenize {
     }
 
    print("eachWord $eachWord");
-   print("wo2vec ${wordtovec[0]}");
+   //print("wo2vec ${wordtovec[0]}");
+
     // if elements of wordtovec is in json file add a '1' at that position else '0'
     for (var i = 0; i < count; i++) {
       if (wordtovec.contains(i))
